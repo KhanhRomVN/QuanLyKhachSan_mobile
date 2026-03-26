@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/page_bg"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="40dp" />
+
+        <!-- Logo Illustration Section -->
+        <FrameLayout
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginBottom="28dp">
+            
+            <View
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:background="@drawable/bg_circle_outline"
+                android:alpha="0.13" />
+            
+            <View
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_circle_outline"
+                android:alpha="0.1" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#1A9a7340">
+                
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_hotel"
+                    app:tint="#9a7340" />
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
+        <!-- Brand Text -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="8dp">
+            <View android:layout_width="20dp" android:layout_height="1dp" android:background="#9a7340" android:alpha="0.5" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HOTEL MANAGEMENT"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="#9a7340"
+                android:letterSpacing="0.14"
+                android:layout_marginHorizontal="6dp" />
+            <View android:layout_width="20dp" android:layout_height="1dp" android:background="#9a7340" android:alpha="0.5" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chào mừng\ntrở lại"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#1a1810"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="Hệ thống quản lý khách sạn toàn diện, thông minh và dễ sử dụng."
+            android:textSize="14sp"
+            android:textColor="#7a7568"
+            android:gravity="center"
+            android:lineSpacingExtra="2dp"
+            android:layout_marginBottom="32dp" />
+
+        <!-- Login Form -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                style="@style/FormLabel"
+                android:text="EMAIL" />
+            <EditText
+                android:id="@+id/etLoginEmail"
+                style="@style/FormInput"
+                android:hint="ten@hotel.com"
+                android:background="@drawable/bg_input"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="11dp"
+                android:inputType="textEmailAddress" />
+
+            <TextView
+                style="@style/FormLabel"
+                android:layout_marginTop="16dp"
+                android:text="MẬT KHẨU" />
+            <EditText
+                android:id="@+id/etLoginPassword"
+                style="@style/FormInput"
+                android:hint="••••••••"
+                android:background="@drawable/bg_input"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="11dp"
+                android:inputType="textPassword" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="32dp"
+                android:text="Đăng nhập"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:backgroundTint="#9a7340"
+                android:textColor="#ffffff"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
+                app:elevation="0dp"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>

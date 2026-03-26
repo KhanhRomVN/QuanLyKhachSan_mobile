@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/page_bg">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="16dp">
+
+        <ImageButton
+            android:id="@+id/btnBackRoomDetail"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_rounded_icon"
+            android:src="@drawable/ic_arrow_right"
+            android:rotation="180"
+            android:padding="8dp"
+            app:tint="@color/text_gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phòng 101"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:fontFamily="serif"/>
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đơn · 1 người"
+                android:textSize="12sp"
+                android:textColor="@color/text_sub"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvStatusBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_status_vacant"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="Trống"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardHero"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="18dp"
+        android:layout_marginBottom="14dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="@color/card_bg"
+        app:strokeColor="@color/card_border"
+        app:strokeWidth="1dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <FrameLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="14dp">
+                    <View
+                        android:id="@+id/viewHeroAvatarBg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_status_badge"
+                        android:backgroundTint="#269a7340" />
+                    <TextView
+                        android:id="@+id/tvHeroNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="101"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#9a7340" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LOẠI PHÒNG"
+                        android:textSize="10sp"
+                        android:textColor="@color/text_gray"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.05" />
+                    <TextView
+                        android:id="@+id/tvHeroType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Phòng đơn"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="end">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="GIÁ PHÒNG"
+                        android:textSize="10sp"
+                        android:textColor="@color/text_gray"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/tvHeroPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="650K"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#9a7340" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Tabs at top -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="18dp"
+        android:layout_marginBottom="14dp"
+        android:padding="2dp"
+        android:background="@drawable/bg_status_badge"
+        android:backgroundTint="#0D000000">
+        <TextView
+            android:id="@+id/tabInfo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Phòng"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:gravity="center"
+            android:background="@drawable/selector_tab_bg"/>
+        <TextView
+            android:id="@+id/tabGuests"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Khách (0)"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_gray"
+            android:gravity="center"
+            android:background="@drawable/selector_tab_bg"/>
+        <TextView
+            android:id="@+id/tabHistory"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Lịch sử (0)"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_gray"
+            android:gravity="center"
+            android:background="@drawable/selector_tab_bg"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbarThumbVertical="@null">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="18dp"
+            android:paddingBottom="24dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- Tab Info -->
+                <LinearLayout
+                    android:id="@+id/layoutTabInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/card_bg"
+                        app:strokeColor="@color/card_border"
+                        app:strokeWidth="1dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <include layout="@layout/view_info_row" android:id="@+id/rowStatus" />
+                            <include layout="@layout/view_info_row" android:id="@+id/rowType" />
+                            <include layout="@layout/view_info_row" android:id="@+id/rowMaxGuests" />
+                            <include layout="@layout/view_info_row" android:id="@+id/rowPrice" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardAmenities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/card_bg"
+                        app:strokeColor="@color/card_border"
+                        app:strokeWidth="1dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="TIỆN NGHI"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_gray"
+                                android:letterSpacing="0.07"
+                                android:layout_marginBottom="10dp"/>
+                            <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/chipGroupAmenities"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:chipSpacingHorizontal="8dp"
+                                app:chipSpacingVertical="4dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardNote"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/card_bg"
+                        app:strokeColor="@color/card_border"
+                        app:strokeWidth="1dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="GHI CHÚ"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_gray"
+                                android:letterSpacing="0.07"
+                                android:layout_marginBottom="6dp"/>
+                            <TextView
+                                android:id="@+id/tvNote"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Không có ghi chú"
+                                android:textSize="13sp"
+                                android:textColor="@color/text_sub"
+                                android:lineSpacingExtra="4sp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <!-- Tab Guests -->
+                <LinearLayout
+                    android:id="@+id/layoutTabGuests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+
+                <!-- Tab History -->
+                <LinearLayout
+                    android:id="@+id/layoutTabHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Actions -->
+    <LinearLayout
+        android:id="@+id/cardActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="18dp"
+        android:background="@color/page_bg">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:text="Chỉnh sửa"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:backgroundTint="#9a7340"
+            android:textColor="#FFFFFF"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            app:elevation="0dp"
+            app:cornerRadius="12dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:text="Xoá phòng"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:backgroundTint="#0D000000"
+            android:textColor="#7a7568"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            app:elevation="0dp"
+            app:cornerRadius="12dp" />
+    </LinearLayout>
+</LinearLayout>

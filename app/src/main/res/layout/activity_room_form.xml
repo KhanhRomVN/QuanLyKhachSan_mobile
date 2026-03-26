@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/page_bg">
+
+    <!-- Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_rounded_icon"
+            android:src="@drawable/ic_arrow_right"
+            android:rotation="180"
+            android:padding="8dp"
+            app:tint="@color/text_gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toEndOf="@id/btnBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/tvFormTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thêm phòng mới"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#1a1810" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Điền thông tin phòng đơn giản"
+                android:textSize="12sp"
+                android:textColor="#7a7568" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="18dp"
+            android:paddingBottom="24dp">
+
+            <!-- Basic Info Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#0A000000">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="THÔNG TIN CƠ BẢN"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#b0ab9e"
+                        android:letterSpacing="0.07"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                        <TextView style="@style/FormLabel" android:text="SỐ PHÒNG *" />
+                        <EditText android:id="@+id/etRoomNumber" style="@style/FormInput" android:inputType="text" android:hint="Vd: 101" />
+                    </LinearLayout>
+ 
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="12dp">
+                        <TextView style="@style/FormLabel" android:text="LOẠI PHÒNG" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="5dp">
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnTypeSingle"
+                                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="2dp"
+                                android:text="Phòng đơn"
+                                android:textSize="12sp"
+                                android:textAllCaps="false"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:minHeight="36dp"
+                                app:cornerRadius="12dp" />
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnTypeDouble"
+                                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginHorizontal="2dp"
+                                android:text="Phòng đôi"
+                                android:textSize="12sp"
+                                android:textAllCaps="false"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:minHeight="36dp"
+                                app:cornerRadius="12dp" />
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnTypeQuad"
+                                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="2dp"
+                                android:text="Phòng 4 người"
+                                android:textSize="12sp"
+                                android:textAllCaps="false"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:minHeight="36dp"
+                                app:cornerRadius="12dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Specs Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#0A000000">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="THÔNG SỐ PHÒNG"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#b0ab9e"
+                        android:letterSpacing="0.07"
+                        android:layout_marginBottom="12dp" />
+
+                    <TextView style="@style/FormLabel" android:text="GIÁ / ĐÊM (VNĐ) *" />
+                    <EditText android:id="@+id/etPrice" style="@style/FormInput" android:inputType="number" android:hint="Vd: 500000" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Amenities Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#0A000000">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TIỆN NGHI"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#b0ab9e"
+                        android:letterSpacing="0.07"
+                        android:layout_marginBottom="12dp" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cgAmenities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:chipSpacingHorizontal="8dp"
+                        app:chipSpacingVertical="6dp"
+                        app:singleSelection="false">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipWifi"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Wifi"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipAc"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Điều hòa"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipTv"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tivi"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipBath"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bồn tắm"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipFridge"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tủ lạnh"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipDryer"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Máy sấy"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipBar"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mini Bar"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipSafe"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Két sắt"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipWork"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bàn việc"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipSofa"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sofa"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipBalcony"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ban công"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipKettle"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ấm điện"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipSlippers"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Dép"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipRobe"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Áo choàng"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipToiletries"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Đồ vệ sinh"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipPhone"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Điện thoại"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipClock"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Đồng hồ"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipCable"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cáp TV"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipMicrowave"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Lò vi sóng"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipIron"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bàn là"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipBlackout"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rèm cản sáng"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipView"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View biển"
+                            app:chipBackgroundColor="@color/bg_chip_amenity"
+                            app:chipStrokeColor="#1A000000"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="8dp"
+                            app:checkedIconVisible="false"
+                            app:chipMinTouchTargetSize="0dp"
+                            android:minHeight="28dp"
+                            android:textSize="11sp"
+                            app:chipStartPadding="4dp"
+                            app:chipEndPadding="4dp"
+                            android:textColor="@color/text_chip_amenity" />
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Note Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#0A000000">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="THÔNG TIN KHÁC"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#b0ab9e"
+                        android:letterSpacing="0.07"
+                        android:layout_marginBottom="12dp" />
+
+                    <TextView style="@style/FormLabel" android:text="Ghi chú" />
+                    <EditText
+                        android:id="@+id/etNote"
+                        style="@style/FormInput"
+                        android:hint="Ghi chú thêm về phòng..."
+                        android:minLines="3"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Fixed Bottom Actions -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="18dp"
+        android:background="@color/page_bg">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:text="Hủy"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:backgroundTint="#0D000000"
+            android:textColor="#7a7568"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            app:elevation="0dp"
+            app:cornerRadius="12dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:text="Lưu thay đổi"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:backgroundTint="#9a7340"
+            android:textColor="#FFFFFF"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            app:elevation="0dp"
+            app:cornerRadius="12dp" />
+    </LinearLayout>
+
+</LinearLayout>

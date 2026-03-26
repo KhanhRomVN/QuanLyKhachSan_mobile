@@ -1,0 +1,28 @@
+# IDE and Gradle files
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+
+# Ignore build directories in all modules
+build/
+
+# IDE and Project specific
+captures/
+.externalNativeBuild
+.cxx
+
+# Package files
+*.apk
+*.ap_
+*.aab
+
+# Keystore files
+*.jks
+*.keystore
+
+# Temporary and local folders
+/temp/
+*.hprof
+*.log

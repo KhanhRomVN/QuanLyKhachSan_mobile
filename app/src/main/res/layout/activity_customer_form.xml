@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/page_bg">
+
+    <!-- Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="18dp">
+
+        <ImageButton
+            android:id="@+id/btnBackCustomerForm"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_rounded_icon"
+            android:src="@drawable/ic_arrow_right"
+            android:rotation="180"
+            android:padding="8dp"
+            app:tint="@color/text_gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toEndOf="@id/btnBackCustomerForm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/tvCustomerFormTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thêm khách hàng"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#1a1810" />
+
+            <TextView
+                android:id="@+id/tvCustomerFormSubTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Điền đầy đủ thông tin"
+                android:textSize="12sp"
+                android:textColor="#7a7568" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbarThumbVertical="@null">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="18dp"
+            android:paddingBottom="24dp">
+
+            <!-- Identity Section -->
+            <!-- Identity Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#0A000000">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ĐỊNH DANH"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#b0ab9e"
+                        android:letterSpacing="0.07"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                        <TextView style="@style/FormLabel" android:text="HỌ VÀ TÊN *" />
+                        <EditText
+                            android:id="@+id/etCustomerName"
+                            style="@style/FormInput"
+                            android:hint="Họ và tên *"
+                            android:inputType="textPersonName" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="12dp">
+                        <TextView style="@style/FormLabel" android:text="SỐ CCCD / HỘ CHIẾU" />
+                        <EditText
+                            android:id="@+id/etCustomerCCCD"
+                            style="@style/FormInput"
+                            android:hint="Số CCCD (tùy chọn)"
+                            android:inputType="number" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Contact Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#0A000000">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LIÊN HỆ"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#b0ab9e"
+                        android:letterSpacing="0.07"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                        <TextView style="@style/FormLabel" android:text="SỐ ĐIỆN THOẠI" />
+                        <EditText
+                            android:id="@+id/etCustomerPhone"
+                            style="@style/FormInput"
+                            android:hint="Số điện thoại (tùy chọn)"
+                            android:inputType="phone" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="12dp">
+                        <TextView style="@style/FormLabel" android:text="EMAIL" />
+                        <EditText
+                            android:id="@+id/etCustomerEmail"
+                            style="@style/FormInput"
+                            android:hint="Email (tùy chọn)"
+                            android:inputType="textEmailAddress" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Note Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#0A000000">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="GHI CHÚ"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#b0ab9e"
+                        android:letterSpacing="0.07"
+                        android:layout_marginBottom="12dp" />
+
+                    <TextView style="@style/FormLabel" android:text="Ghi chú" />
+                    <EditText
+                        android:id="@+id/etCustomerNote"
+                        style="@style/FormInput"
+                        android:hint="Ghi chú thêm về khách hàng..."
+                        android:gravity="top"
+                        android:minLines="3"
+                        android:background="@null"
+                        android:inputType="textMultiLine" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Fixed Bottom Actions -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="18dp"
+        android:background="@color/page_bg">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelCustomer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:text="Hủy"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:backgroundTint="#0D000000"
+            android:textColor="#7a7568"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            app:elevation="0dp"
+            app:cornerRadius="12dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaveCustomerForm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:text="Lưu"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:backgroundTint="#9a7340"
+            android:textColor="#FFFFFF"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            app:elevation="0dp"
+            app:cornerRadius="12dp" />
+    </LinearLayout>
+
+</LinearLayout>

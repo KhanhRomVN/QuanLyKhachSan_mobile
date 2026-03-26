@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/page_bg">
+
+    <!-- Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="16dp">
+
+        <ImageButton
+            android:id="@+id/btnBackCustomerDetail"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_rounded_icon"
+            android:src="@drawable/ic_arrow_right"
+            android:rotation="180"
+            android:padding="8dp"
+            app:tint="@color/text_gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toEndOf="@id/btnBackCustomerDetail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chi tiết khách"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#1a1810" />
+
+            <TextView
+                android:id="@+id/tvCustomerDetailId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ID #1"
+                android:textSize="12sp"
+                android:textColor="#7a7568" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarThumbVertical="@null">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="18dp"
+            android:paddingBottom="24dp">
+
+            <!-- Hero Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/card_bg"
+                app:strokeColor="@color/card_border"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="14dp">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="14dp">
+                            <View
+                                android:id="@+id/viewHeroCustomerAvatarBg"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/bg_status_badge" />
+                            <TextView
+                                android:id="@+id/tvHeroCustomerInitials"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="AN"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#FFFFFF" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tvHeroCustomerName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nguyễn Văn An"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="#1a1810" />
+                            <TextView
+                                android:id="@+id/tvHeroCustomerPhone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0901111222"
+                                android:textSize="12sp"
+                                android:textColor="#7a7568" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#0D000000"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Hero Stats -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        
+                        <LinearLayout style="@style/HeroStatBox">
+                            <TextView android:id="@+id/tvHeroStatBookings" style="@style/HeroStatValue" android:text="2" />
+                            <TextView style="@style/HeroStatLabel" android:text="Lần đặt" />
+                        </LinearLayout>
+
+                        <View style="@style/HeroStatDivider" />
+
+                        <LinearLayout style="@style/HeroStatBox">
+                            <TextView android:id="@+id/tvHeroStatNights" style="@style/HeroStatValue" android:text="6" />
+                            <TextView style="@style/HeroStatLabel" android:text="Tổng đêm" />
+                        </LinearLayout>
+
+                        <View style="@style/HeroStatDivider" />
+
+                        <LinearLayout style="@style/HeroStatBox">
+                            <TextView android:id="@+id/tvHeroStatTotalSpent" style="@style/HeroStatValue" android:text="17.1M" android:textColor="#9a7340" />
+                            <TextView style="@style/HeroStatLabel" android:text="Tổng chi" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Tabs -->
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabCustomerDetail"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginBottom="14dp"
+                android:padding="2dp"
+                android:background="@drawable/bg_status_badge"
+                android:backgroundTint="#0D000000"
+                app:tabIndicatorHeight="0dp"
+                app:tabSelectedTextColor="#1a1810"
+                app:tabTextColor="#b0ab9e"
+                app:tabRippleColor="@null"
+                app:tabTextAppearance="@style/TabTextAppearance"
+                app:tabBackground="@drawable/selector_tab_bg">
+                <com.google.android.material.tabs.TabItem android:text="Thông tin" />
+                <com.google.android.material.tabs.TabItem android:text="Lịch sử đặt" />
+            </com.google.android.material.tabs.TabLayout>
+
+            <FrameLayout
+                android:id="@+id/frameCustomerTabContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                
+                <!-- This will be replaced by view items depending on tab -->
+                <LinearLayout
+                    android:id="@+id/layoutCustomerInfoTab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+                    
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/card_bg"
+                        app:strokeColor="@color/card_border"
+                        app:strokeWidth="1dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <include layout="@layout/view_info_row" android:id="@+id/rowCCCD" />
+                            <include layout="@layout/view_info_row" android:id="@+id/rowPhoneDetail" />
+                            <include layout="@layout/view_info_row" android:id="@+id/rowEmailDetail" />
+                            <include layout="@layout/view_info_row" android:id="@+id/rowAddress" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardCustomerNote"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/card_bg"
+                        app:strokeColor="@color/card_border"
+                        app:strokeWidth="1dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="GHI CHÚ"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="#b0ab9e"
+                                android:letterSpacing="0.07"
+                                android:layout_marginBottom="6dp" />
+                            <TextView
+                                android:id="@+id/tvCustomerNote"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Khách VIP, ưu tiên phòng tầng cao"
+                                android:textSize="13sp"
+                                android:textColor="#7a7568"
+                                android:lineSpacingExtra="4sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutCustomerHistoryTab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvBookingHistory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false" />
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <!-- Actions -->
+            <LinearLayout
+                android:id="@+id/layoutCustomerActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+                <Button
+                    android:id="@+id/btnEditCustomer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:text="Chỉnh sửa"
+                    android:textAllCaps="false"
+                    android:backgroundTint="#9a7340"
+                    android:textColor="#FFFFFF"
+                    app:cornerRadius="12dp" />
+                <Button
+                    android:id="@+id/btnDeleteCustomer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:text="Xoá"
+                    android:textAllCaps="false"
+                    android:backgroundTint="#0D000000"
+                    android:textColor="#7a7568"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

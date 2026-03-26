@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_rooms"
+        android:enabled="true"
+        android:icon="@drawable/ic_nav_rooms"
+        android:title="Phòng" />
+
+    <item
+        android:id="@+id/nav_staff"
+        android:enabled="true"
+        android:icon="@drawable/ic_nav_staff"
+        android:title="Nhân viên" />
+
+    <item
+        android:id="@+id/nav_customers"
+        android:enabled="true"
+        android:icon="@drawable/ic_nav_customers"
+        android:title="Khách hàng" />
+
+    <item
+        android:id="@+id/nav_revenue"
+        android:enabled="true"
+        android:icon="@drawable/ic_nav_revenue"
+        android:title="Doanh thu" />
+</menu>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/page_bg">
+
+    <!-- Header & Search Area -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="14dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="14dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="2dp">
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="5dp"
+                        android:background="#9a7340"
+                        android:layout_marginEnd="6dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="QUẢN LÝ KHÁCH HÀNG"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="#9a7340"
+                        android:letterSpacing="0.1" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Danh sách khách"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#1a1810" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Stats row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="14dp">
+            
+            <LinearLayout style="@style/StatBox" android:id="@+id/boxTotalCustomers">
+                <TextView android:id="@+id/tvStatTotalCustomers" style="@style/StatValue" android:text="6" />
+                <TextView style="@style/StatLabel" android:text="Tổng khách" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/StatBox" android:id="@+id/boxStayingCustomers" android:layout_marginHorizontal="8dp">
+                <TextView android:id="@+id/tvStatStayingCustomers" style="@style/StatValue" android:text="4" android:textColor="#3464b4" />
+                <TextView style="@style/StatLabel" android:text="Đang ở" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/StatBox" android:id="@+id/boxTotalRevenue">
+                <TextView android:id="@+id/tvStatTotalRevenue" style="@style/StatValue" android:text="59.4M" android:textColor="#3a8a5a" />
+                <TextView style="@style/StatLabel" android:text="Doanh thu" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Search Area -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <EditText
+                    android:id="@+id/etSearchCustomer"
+                    style="@style/FormInput"
+                    android:layout_height="40dp"
+                    android:hint="Tên, CCCD, SĐT, email..."
+                    android:textSize="13sp"
+                    android:paddingStart="38dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/bg_input"
+                    android:singleLine="true" />
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_marginStart="12dp"
+                    android:src="@drawable/ic_search_small"
+                    app:tint="#b0ab9e" />
+            </FrameLayout>
+
+            <ImageButton
+                android:id="@+id/btnAddCustomer"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_add_button_soft"
+                android:src="@drawable/ic_add_plus"
+                android:padding="10dp"
+                app:tint="#9a7340" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvFilteredCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="6 khách hàng"
+        android:textSize="11sp"
+        android:textColor="#b0ab9e"
+        android:layout_marginStart="18dp"
+        android:layout_marginBottom="10dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCustomerList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="18dp"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp" />
+
+</LinearLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/status_maintenance_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trả phòng &amp; Thanh toán"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="#EB5757"
+            android:letterSpacing="0.03"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/tvCheckoutSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng tiền: 1.95M (3 đêm × 650K)"
+            android:textSize="13sp"
+            android:textColor="@color/text_sub"
+            android:layout_marginBottom="18dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCheckout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="TIẾN HÀNH TRẢ PHÒNG"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false"
+            android:letterSpacing="0.05"
+            app:backgroundTint="#9a7340"
+            app:cornerRadius="12dp"
+            app:elevation="0dp"
+            android:stateListAnimator="@null"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

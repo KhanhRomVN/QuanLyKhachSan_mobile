@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Material 3 Bottom Navigation Overrides -->
+    <dimen name="m3_navigation_item_label_padding_top" tools:override="true">2dp</dimen>
+    <dimen name="m3_navigation_item_active_indicator_height" tools:override="true">0dp</dimen>
+    <dimen name="m3_navigation_item_active_indicator_width" tools:override="true">0dp</dimen>
+    <dimen name="m3_navigation_item_active_indicator_margin_top" tools:override="true">0dp</dimen>
+    <dimen name="m3_navigation_item_label_padding_bottom" tools:override="true">2dp</dimen>
+</resources>

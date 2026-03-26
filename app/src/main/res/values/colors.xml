@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#9a7340</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="secondary">#e8e4dc</color>
+    <color name="on_secondary">#1a1810</color>
+    <color name="page_bg">#f7f3ee</color>
+    <color name="text_primary">#1a1810</color>
+    <color name="text_gray">#7a7568</color>
+    <color name="text_muted">#999999</color>
+    <color name="text_sub">#7a7568</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="nav_bg">#f9f7f3</color>
+    <color name="nav_inactive">#B0AB9E</color>
+    <color name="accent">#9a7340</color>
+    <color name="accent_dim">#1A9a7340</color>
+    <color name="accent_border">#409a7340</color>
+    <color name="card_bg">#f9f7f3</color>
+    <color name="card_border">#E8E4DC</color>
+    <color name="divider">#E8E4DC</color>
+    <color name="input_bg">#FFFFFF</color>
+    <color name="input_border">#D0C8C0</color>
+    
+    <!-- Status colors -->
+    <color name="status_occupied_text">#64A0F0</color>
+    <color name="status_occupied_bg">#1A64A0F0</color>
+    <color name="status_occupied_border">#4064A0F0</color>
+    <color name="status_vacant_text">#6FCF97</color>
+    <color name="status_vacant_bg">#1A6FCF97</color>
+    <color name="status_vacant_border">#406FCF97</color>
+    <color name="status_dirty_text">#FBBF24</color>
+    <color name="status_dirty_bg">#1AFBBF24</color>
+    <color name="status_dirty_border">#40FBBF24</color>
+    <color name="status_maintenance_text">#EB5757</color>
+    <color name="status_maintenance_bg">#1AEB5757</color>
+    <color name="status_maintenance_border">#40EB5757</color>
+</resources>

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Muzi Hotel</string>
+    <string name="nav_home">Khám phá</string>
+    <string name="nav_management">Quản lý</string>
+    <string name="nav_booking">Đặt phòng</string>
+    <string name="nav_settings">Cài đặt</string>
+    <string name="welcome">Chào mừng</string>
+    <string name="welcome_back">Chào mừng trở lại!</string>
+    <string name="search_hint">Tìm khách sạn...</string>
+    <string name="email">Email</string>
+    <string name="password">Mật khẩu</string>
+    <string name="repeat_password">Nhập lại mật khẩu</string>
+    <string name="login">Đăng nhập</string>
+    <string name="register">Đăng ký</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="no_account">Chưa có tài khoản? Đăng ký ngay</string>
+    <string name="have_account">Đã có tài khoản? Đăng nhập</string>
+    <string name="per_night">/ đêm</string>
+    <string name="nearby_hotels">Khách sạn gần bạn</string>
+    <string name="region_hotels">Khách sạn theo khu vực</string>
+    <string name="suggestion_hotels">Gợi ý cho bạn</string>
+    <string name="see_all">Xem tất cả</string>
+    <string name="explore_title">Khám phá\nkhách sạn tốt nhất</string>
+</resources>
