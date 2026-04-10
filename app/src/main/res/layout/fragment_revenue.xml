@@ -152,10 +152,13 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="16dp">
-                        <View
+                        <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:background="@drawable/bg_metric_icon"
+                            android:src="@drawable/ic_hand_coins"
+                            android:padding="7dp"
+                            app:tint="#9a7340"
                             android:layout_marginBottom="12dp" />
                         <TextView
                             android:layout_width="wrap_content"
@@ -191,11 +194,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="16dp">
-                        <View
+                        <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:background="@drawable/bg_metric_icon"
                             android:backgroundTint="#1A3464b4"
+                            android:src="@drawable/ic_square_activity"
+                            android:padding="7dp"
+                            app:tint="#3464b4"
                             android:layout_marginBottom="12dp" />
                         <TextView
                             android:layout_width="wrap_content"
@@ -232,11 +238,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="16dp">
-                        <View
+                        <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:background="@drawable/bg_metric_icon"
                             android:backgroundTint="#1A3a8a5a"
+                            android:src="@drawable/ic_sparkles"
+                            android:padding="7dp"
+                            app:tint="#3a8a5a"
                             android:layout_marginBottom="12dp" />
                         <TextView
                             android:layout_width="wrap_content"
@@ -273,11 +282,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="16dp">
-                        <View
+                        <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:background="@drawable/bg_metric_icon"
                             android:backgroundTint="#1Ab47814"
+                            android:src="@drawable/ic_signal_medium"
+                            android:padding="7dp"
+                            app:tint="#b47814"
                             android:layout_marginBottom="12dp" />
                         <TextView
                             android:layout_width="wrap_content"

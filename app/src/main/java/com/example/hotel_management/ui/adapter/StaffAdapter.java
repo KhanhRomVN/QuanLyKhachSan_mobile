@@ -19,6 +19,7 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHol
 
     public interface OnStaffClickListener {
         void onStaffClick(Staff staff);
+        void onSwitchAccountClick(Staff staff);
     }
 
     public StaffAdapter(List<Staff> staffList, OnStaffClickListener listener) {
@@ -46,12 +47,14 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHol
 
     static class StaffViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvEmail, tvRoleBadge;
+        android.widget.ImageButton btnSwitch;
 
         public StaffViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvStaffName);
             tvEmail = itemView.findViewById(R.id.tvStaffEmail);
             tvRoleBadge = itemView.findViewById(R.id.tvStaffRoleBadge);
+            btnSwitch = itemView.findViewById(R.id.btnSwitchAccount);
         }
 
         public void bind(Staff staff, OnStaffClickListener listener) {
@@ -77,18 +80,25 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHol
             boolean isManager = staff.getRole().equalsIgnoreCase("Quản lý") || 
                                staff.getRole().equalsIgnoreCase("Admin") || 
                                staff.getRole().equalsIgnoreCase("Trưởng ca");
-            GradientDrawable roleBg = (GradientDrawable) tvRoleBadge.getBackground();
-            if (isManager) {
-                roleBg.setColor(0x1A9a7340);
-                roleBg.setStroke(2, 0x409a7340);
-                tvRoleBadge.setTextColor(0xFF9a7340);
-            } else {
-                roleBg.setColor(0x0D000000);
-                roleBg.setStroke(2, 0x1A000000);
-                tvRoleBadge.setTextColor(0xFF7a7568);
+            
+            android.graphics.drawable.Drawable background = tvRoleBadge.getBackground();
+            if (background instanceof GradientDrawable) {
+                GradientDrawable roleBg = (GradientDrawable) background.mutate();
+                if (isManager) {
+                    roleBg.setColor(0x1A9a7340);
+                    roleBg.setStroke(2, 0x409a7340);
+                    tvRoleBadge.setTextColor(0xFF9a7340);
+                } else {
+                    roleBg.setColor(0x0D000000);
+                    roleBg.setStroke(2, 0x1A000000);
+                    tvRoleBadge.setTextColor(0xFF7a7568);
+                }
             }
 
             itemView.setOnClickListener(v -> listener.onStaffClick(staff));
+            if (btnSwitch != null) {
+                btnSwitch.setOnClickListener(v -> listener.onSwitchAccountClick(staff));
+            }
         }
     }
 }

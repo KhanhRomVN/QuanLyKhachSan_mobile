@@ -108,4 +108,16 @@ public class StaffRepository {
         }
         return staff;
     }
+
+    public int getAdminCount() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_STAFF + 
+                " WHERE " + DatabaseHelper.COLUMN_STAFF_ROLE + " = 'admin'", null);
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
 }

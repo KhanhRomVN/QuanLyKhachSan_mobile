@@ -91,9 +91,17 @@ public class RevenueFragment extends Fragment {
             }
 
             if (isCurMonth) {
-                // Accept various "income" statuses
+                // Check if it's an income transaction by Status or Type
                 String status = t.getStatus() != null ? t.getStatus().toLowerCase() : "";
-                if (status.equals("paid") || status.equals("income") || status.equals("đã thu")) {
+                String type = t.getType() != null ? t.getType().toLowerCase() : "";
+                
+                boolean isIncome = status.equals("paid") || 
+                                 status.equals("income") || 
+                                 status.equals("completed") || 
+                                 status.equals("đã thu") ||
+                                 type.equals("income");
+
+                if (isIncome) {
                     monthRevenue += t.getAmount();
                 }
                 monthBookings++;

@@ -53,6 +53,78 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Current Account Section -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardCurrentUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#0D9a7340"
+        app:strokeWidth="1dp"
+        app:strokeColor="#1A9a7340">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="12dp">
+                <View
+                    android:id="@+id/viewCurrentUserAvatarBg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_status_badge" />
+                <TextView
+                    android:id="@+id/tvCurrentUserAvatarInitials"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="AD"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#9a7340" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvCurrentUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Admin"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#1a1810" />
+                <TextView
+                    android:id="@+id/tvCurrentUserEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="admin@hotel.com"
+                    android:textSize="11sp"
+                    android:textColor="#7a7568" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnLogout"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:padding="9dp"
+                android:background="@drawable/bg_rounded_icon"
+                android:backgroundTint="#1Ae74c3c"
+                android:src="@drawable/ic_log_out"
+                app:tint="#e74c3c" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- Search Area -->
     <LinearLayout
