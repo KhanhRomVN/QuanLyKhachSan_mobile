@@ -4,21 +4,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Lớp đại diện cho Lịch sử thuê phòng của một phòng cụ thể.
+ * Được dùng để hiển thị danh sách các khách đã từng ở tại phòng này trong màn hình 'Chi tiết phòng'.
+ */
 public class BookingHistory implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String id;
-    private String checkIn;
-    private String checkOut;
-    private int nights;
-    private List<Guest> guests;
-    private long total;
-    private String paidBy;
-    private String paidAt;
+    private String id;              // Mã giao dịch/đơn đặt phòng
+    private String checkIn;         // Ngày nhận phòng
+    private String checkOut;        // Ngày trả phòng
+    private int nights;             // Tổng số đêm ở
+    private List<Guest> guests;     // Danh sách khách hàng đã ở trong lần đặt này
+    private long total;             // Tổng số tiền đã thanh toán
+    private String paidBy;          // Người thực hiện thanh toán
+    private String paidAt;          // Thời điểm thanh toán
 
     public BookingHistory() {
         this.guests = new ArrayList<>();
     }
 
+    // --- Các phương thức Getter và Setter ---
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

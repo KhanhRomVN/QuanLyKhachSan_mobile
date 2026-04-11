@@ -10,6 +10,10 @@ import com.example.hotel_management.data.model.Customer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Lớp quản lý dữ liệu (Repository) cho bảng Khách hàng (Customers).
+ * Cung cấp các thao tác quản lý thông tin khách hàng và truy vấn lịch sử đặt phòng của từng khách.
+ */
 public class CustomerRepository {
     private DatabaseHelper dbHelper;
 
@@ -17,6 +21,9 @@ public class CustomerRepository {
         dbHelper = new DatabaseHelper(context);
     }
 
+    /**
+     * Thêm một khách hàng mới vào hệ thống.
+     */
     public long insertCustomer(Customer customer) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -29,6 +36,9 @@ public class CustomerRepository {
         return db.insert(DatabaseHelper.TABLE_CUSTOMERS, null, values);
     }
 
+    /**
+     * Cập nhật thông tin của một khách hàng đã tồn tại.
+     */
     public int updateCustomer(Customer customer) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -42,12 +52,18 @@ public class CustomerRepository {
                 new String[]{String.valueOf(customer.getId())});
     }
 
+    /**
+     * Xóa khách hàng khỏi hệ thống dựa trên ID.
+     */
     public int deleteCustomer(int id) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         return db.delete(DatabaseHelper.TABLE_CUSTOMERS, DatabaseHelper.COLUMN_ID + "=?", 
                 new String[]{String.valueOf(id)});
     }
 
+    /**
+     * Lấy danh sách toàn bộ khách hàng, sắp xếp theo tên từ A-Z.
+     */
     @SuppressLint("Range")
     public List<Customer> getAllCustomers() {
         List<Customer> customers = new ArrayList<>();
@@ -57,6 +73,7 @@ public class CustomerRepository {
 
         if (cursor.moveToFirst()) {
             do {
+                // Chuyển kết quả từ Cursor sang đối tượng Customer
                 Customer customer = new Customer(
                     cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_NAME)),
                     cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_CCCD)),
@@ -72,6 +89,10 @@ public class CustomerRepository {
         return customers;
     }
 
+    /**
+     * Lấy danh sách các lần đặt phòng (Lịch sử) của một khách hàng cụ thể.
+     * Logic tìm kiếm dựa trên so khớp chuỗi trong cột guest của bảng transactions.
+     */
     @SuppressLint("Range")
     public List<Booking> getCustomerBookings(Customer customer) {
         List<Booking> list = new ArrayList<>();
@@ -85,12 +106,12 @@ public class CustomerRepository {
         String selection = DatabaseHelper.COLUMN_TX_GUEST + " LIKE ?";
         String[] selectionArgs;
 
+        // Ưu tiên tìm kiếm bằng CCCD để độ chính xác cao nhất
         if (!cccd.isEmpty()) {
-            // Search by CCCD (most accurate)
             selectionArgs = new String[]{"%|" + cccd + "|%"};
         } else {
-            // Fallback: Search by Name and Phone if CCCD is missing
-            // Format is Name|CCCD|Phone. If CCCD is empty: Name||Phone
+            // Dự phòng: Tìm kiếm theo Tên và SĐT nếu thiếu CCCD
+            // Định dạng lưu trong DB là: Tên|CCCD|SĐT
             selectionArgs = new String[]{"%" + name + "||" + phone + "%"};
         }
 
@@ -99,6 +120,7 @@ public class CustomerRepository {
 
         if (cursor.moveToFirst()) {
             do {
+                // Ánh xạ thông tin giao dịch thành đối tượng Booking để hiển thị ở UI
                 String id = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TX_ID));
                 String room = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TX_ROOM));
                 String date = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TX_DATE));

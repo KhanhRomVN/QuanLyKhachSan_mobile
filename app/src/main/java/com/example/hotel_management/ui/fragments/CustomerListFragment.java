@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Fragment hiển thị Danh sách Khách hàng.
+ * Quản lý thông tin hồ sơ khách hàng, tìm kiếm và hiển thị các số liệu thống kê về khách.
+ */
 public class CustomerListFragment extends Fragment implements CustomerAdapter.OnCustomerClickListener {
 
     private RecyclerView rvCustomers;
@@ -34,22 +38,29 @@ public class CustomerListFragment extends Fragment implements CustomerAdapter.On
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Nạp giao diện từ fragment_customer_list
         View view = inflater.inflate(R.layout.fragment_customer_list, container, false);
         
         customerRepository = new com.example.hotel_management.data.db.CustomerRepository(getContext());
         initViews(view);
         loadCustomers();
         setupRecyclerView();
-        filter("");
+        filter(""); // Hiển thị toàn bộ danh sách lúc ban đầu
         updateStats();
 
         return view;
     }
 
+    /**
+     * Tải danh sách khách hàng từ Database.
+     */
     private void loadCustomers() {
         customerList = customerRepository.getAllCustomers();
     }
 
+    /**
+     * Làm mới dữ liệu mỗi khi người dùng quay lại màn hình này.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -57,19 +68,26 @@ public class CustomerListFragment extends Fragment implements CustomerAdapter.On
         filter(etSearch.getText().toString());
     }
 
+    /**
+     * Ánh xạ View và thiết lập sự kiện.
+     */
     private void initViews(View view) {
         rvCustomers = view.findViewById(R.id.rvCustomerList);
         etSearch = view.findViewById(R.id.etSearchCustomer);
         tvTotalCount = view.findViewById(R.id.tvFilteredCount);
+        
+        // Các TextView hiển thị thống kê ở trên cùng
         tvStatTotal = view.findViewById(R.id.tvStatTotalCustomers);
         tvStatStaying = view.findViewById(R.id.tvStatStayingCustomers);
         tvStatRevenue = view.findViewById(R.id.tvStatTotalRevenue);
 
+        // Nút thêm khách hàng mới
         view.findViewById(R.id.btnAddCustomer).setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), com.example.hotel_management.management.CustomerFormActivity.class);
             startActivity(intent);
         });
 
+        // Lắng nghe thay đổi trong ô tìm kiếm
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -82,20 +100,26 @@ public class CustomerListFragment extends Fragment implements CustomerAdapter.On
         });
     }
 
+    /**
+     * Thiết lập hiển thị danh sách bằng RecyclerView.
+     */
     private void setupRecyclerView() {
         adapter = new CustomerAdapter(new ArrayList<>(customerList), this);
         rvCustomers.setLayoutManager(new LinearLayoutManager(getContext()));
         rvCustomers.setAdapter(adapter);
     }
 
-
+    /**
+     * Bộ lọc tìm kiếm: Cho phép tìm theo Tên, CCCD, Số điện thoại hoặc Email.
+     */
     private void filter(String text) {
         List<Customer> filteredList = new ArrayList<>();
         for (Customer customer : customerList) {
-            if (customer.getName().toLowerCase().contains(text.toLowerCase()) ||
-                customer.getCccd().contains(text) ||
-                customer.getPhone().contains(text) ||
-                customer.getEmail().toLowerCase().contains(text.toLowerCase())) {
+            String query = text.toLowerCase();
+            if (customer.getName().toLowerCase().contains(query) ||
+                customer.getCccd().contains(query) ||
+                customer.getPhone().contains(query) ||
+                customer.getEmail().toLowerCase().contains(query)) {
                 filteredList.add(customer);
             }
         }
@@ -103,18 +127,22 @@ public class CustomerListFragment extends Fragment implements CustomerAdapter.On
         tvTotalCount.setText(filteredList.size() + " khách hàng");
     }
 
+    /**
+     * Cập nhật các chỉ số thống kê khách hàng trên giao diện.
+     */
     private void updateStats() {
-        tvStatTotal.setText(String.valueOf(customerList.size()));
+        tvStatTotal.setText(String.valueOf(customerList.size())); // Tổng số khách trong DB
         
         int stayingCount = 0;
         long totalRevenue = 0;
+        
         for (Customer c : customerList) {
             boolean isStaying = false;
             if (c.getBookings() != null) {
                 for (Booking b : c.getBookings()) {
-                    totalRevenue += b.getTotal();
+                    totalRevenue += b.getTotal(); // Cộng dồn doanh thu từ tất cả lần đặt phòng
                     if ("staying".equals(b.getStatus())) {
-                        isStaying = true;
+                        isStaying = true; // Kiểm tra khách có đang lưu trú tại khách sạn không
                     }
                 }
             }
@@ -122,9 +150,13 @@ public class CustomerListFragment extends Fragment implements CustomerAdapter.On
         }
         
         tvStatStaying.setText(String.valueOf(stayingCount));
+        // Hiển thị doanh thu rút gọn (Ví dụ: 15.5M)
         tvStatRevenue.setText(String.format("%.1fM", totalRevenue / 1000000.0));
     }
 
+    /**
+     * Xử lý click vào khách hàng: Chuyển sang màn hình Chi tiết khách hàng.
+     */
     @Override
     public void onCustomerClick(Customer customer) {
         Intent intent = new Intent(getContext(), com.example.hotel_management.management.CustomerDetailActivity.class);

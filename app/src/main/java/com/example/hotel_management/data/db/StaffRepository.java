@@ -9,6 +9,10 @@ import com.example.hotel_management.data.model.Staff;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Lớp quản lý các thao tác truy xuất dữ liệu (Repository) cho bảng Nhân viên (Staff).
+ * Cung cấp các phương thức CRUD (Thêm, Đọc, Sửa, Xóa) và các truy vấn nghiệp vụ liên quan.
+ */
 public class StaffRepository {
     private DatabaseHelper dbHelper;
 
@@ -16,6 +20,10 @@ public class StaffRepository {
         dbHelper = new DatabaseHelper(context);
     }
 
+    /**
+     * Thêm một nhân viên mới vào cơ sở dữ liệu.
+     * @return ID của dòng mới chèn, hoặc -1 nếu lỗi.
+     */
     public long insertStaff(Staff staff) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -31,6 +39,10 @@ public class StaffRepository {
         return db.insert(DatabaseHelper.TABLE_STAFF, null, values);
     }
 
+    /**
+     * Cập nhật thông tin của một nhân viên hiện có.
+     * @return Số dòng bị ảnh hưởng.
+     */
     public int updateStaff(Staff staff) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -47,12 +59,18 @@ public class StaffRepository {
                 new String[]{String.valueOf(staff.getId())});
     }
 
+    /**
+     * Xóa một nhân viên khỏi hệ thống dựa trên ID.
+     */
     public int deleteStaff(int id) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         return db.delete(DatabaseHelper.TABLE_STAFF, DatabaseHelper.COLUMN_ID + "=?", 
                 new String[]{String.valueOf(id)});
     }
 
+    /**
+     * Lấy danh sách toàn bộ nhân viên, sắp xếp theo tên A-Z.
+     */
     @SuppressLint("Range")
     public List<Staff> getAllStaff() {
         List<Staff> staffList = new ArrayList<>();
@@ -62,6 +80,7 @@ public class StaffRepository {
 
         if (cursor.moveToFirst()) {
             do {
+                // Ánh xạ dữ liệu từ DB sang đối tượng Java Staff
                 Staff staff = new Staff(
                     cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_STAFF_NAME)),
@@ -72,8 +91,8 @@ public class StaffRepository {
                     cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_STAFF_ROLE)),
                     cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_STAFF_STATUS)),
                     cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_STAFF_START_DATE)),
-                    cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_STAFF_NAME)).substring(0, 1).toUpperCase(),
-                    "" // note
+                    cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_STAFF_NAME)).substring(0, 1).toUpperCase(), // Khởi đầu tên cho Avatar
+                    "" // Ghi chú trống
                 );
                 staffList.add(staff);
             } while (cursor.moveToNext());
@@ -82,6 +101,9 @@ public class StaffRepository {
         return staffList;
     }
 
+    /**
+     * Tìm kiếm một nhân viên cụ thể dựa trên email.
+     */
     @SuppressLint("Range")
     public Staff getStaffByEmail(String email) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -109,6 +131,10 @@ public class StaffRepository {
         return staff;
     }
 
+    /**
+     * Đếm số lượng Admin hiện có trong hệ thống.
+     * Dùng để ngăn chặn việc xóa tài khoản Admin cuối cùng.
+     */
     public int getAdminCount() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_STAFF + 

@@ -18,11 +18,16 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Fragment hiển thị báo cáo Doanh thu và Quản lý giao dịch.
+ * Chịu trách nhiệm tính toán số liệu thống kê theo tháng/năm và hiển thị các giao dịch gần đây.
+ */
 public class RevenueFragment extends Fragment {
 
     private List<Transaction> transactions;
     private com.example.hotel_management.data.db.TransactionRepository transactionRepository;
 
+    // Các thành phần giao diện (UI Components)
     private TextView tvMonthLabel, tvMonthRevenue, tvRevenueGrowth;
     private TextView tvTotalYear, tvTotalBookings, tvAvgOccupancy, tvAvgPerBooking;
     private RecyclerView rvTransactions;
@@ -30,6 +35,7 @@ public class RevenueFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Nạp layout fragment_revenue
         return inflater.inflate(R.layout.fragment_revenue, container, false);
     }
 
@@ -39,11 +45,15 @@ public class RevenueFragment extends Fragment {
         
         if (getContext() == null) return;
         
+        // Khởi tạo Repository để truy xuất dữ liệu giao dịch từ DB
         transactionRepository = new com.example.hotel_management.data.db.TransactionRepository(getContext());
         initViews(view);
         loadData();
     }
 
+    /**
+     * Ánh xạ các View từ layout XML.
+     */
     private void initViews(View view) {
         tvMonthLabel = view.findViewById(R.id.tvNewMonthLabel);
         tvMonthRevenue = view.findViewById(R.id.tvNewMonthRevenue);
@@ -57,6 +67,9 @@ public class RevenueFragment extends Fragment {
         rvTransactions = view.findViewById(R.id.rvNewTransactions);
     }
 
+    /**
+     * Tải dữ liệu từ cơ sở dữ liệu và cập nhật lên giao diện.
+     */
     private void loadData() {
         transactions = transactionRepository.getAllTransactions();
         if (transactions == null) transactions = new ArrayList<>();
@@ -65,9 +78,12 @@ public class RevenueFragment extends Fragment {
         setupRecyclerView();
     }
 
+    /**
+     * Logic chính để tính toán các chỉ số tài chính dựa trên danh sách giao dịch.
+     */
     private void updateUI() {
         Calendar cal = Calendar.getInstance();
-        int curMonth = cal.get(Calendar.MONTH) + 1;
+        int curMonth = cal.get(Calendar.MONTH) + 1; // Tháng trong Java bắt đầu từ 0
         String curMonthStr = String.format("%02d", curMonth);
         
         tvMonthLabel.setText("Tháng " + curMonth + ", " + cal.get(Calendar.YEAR));
@@ -80,18 +96,19 @@ public class RevenueFragment extends Fragment {
         for (Transaction t : transactions) {
             totalYear += t.getAmount();
             
-            // Reliable month check: extract MM from DD/MM/YYYY
+            // Kiểm tra xem giao dịch có thuộc tháng hiện tại hay không
+            // Dựa trên định dạng ngày DD/MM/YYYY
             String date = t.getDate();
             boolean isCurMonth = false;
             if (date != null && date.length() >= 5) {
-                String monthPart = date.substring(3, 5);
+                String monthPart = date.substring(3, 5); // Lấy phần MM
                 if (monthPart.equals(curMonthStr)) {
                     isCurMonth = true;
                 }
             }
 
             if (isCurMonth) {
-                // Check if it's an income transaction by Status or Type
+                // Chỉ tính toán doanh thu cho các giao dịch có trạng thái là 'thu nhập'
                 String status = t.getStatus() != null ? t.getStatus().toLowerCase() : "";
                 String type = t.getType() != null ? t.getType().toLowerCase() : "";
                 
@@ -108,22 +125,26 @@ public class RevenueFragment extends Fragment {
             }
         }
 
+        // Định dạng và hiển thị dữ liệu
         tvMonthRevenue.setText(formatCurrency(monthRevenue));
         tvTotalYear.setText(formatShort(totalYear));
         tvTotalBookings.setText(String.valueOf(totalBookings));
         
-        // Mock occupancy for UI consistency
+        // Dữ liệu giả định cho tỷ lệ lấp đầy (Occupancy) để giao diện trông sinh động hơn
         tvAvgOccupancy.setText(totalBookings > 0 ? "82%" : "0%");
         
         long avg = totalBookings > 0 ? totalYear / totalBookings : 0;
         tvAvgPerBooking.setText(formatShort(avg));
         
-        // Simple growth mock
+        // Chỉ số tăng trưởng giả định
         tvRevenueGrowth.setText("+12.5%");
     }
 
+    /**
+     * Cấu hình danh sách hiển thị các giao dịch gần đây.
+     */
     private void setupRecyclerView() {
-        // Show last 20 transactions for better overview
+        // Chỉ hiển thị tối đa 20 giao dịch mới nhất để tránh quá tải giao diện
         List<Transaction> recent = new ArrayList<>();
         int count = Math.min(transactions.size(), 20);
         for (int i = 0; i < count; i++) {
@@ -134,11 +155,17 @@ public class RevenueFragment extends Fragment {
         rvTransactions.setAdapter(adapter);
     }
 
+    /**
+     * Định dạng tiền tệ VND (Cụ thể: 1.000.000 đ).
+     */
     private String formatCurrency(long amount) {
         NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         return formatter.format(amount);
     }
 
+    /**
+     * Định dạng rút gọn cho các con số lớn (Ví dụ: 1.5M, 10.2K).
+     */
     private String formatShort(long amount) {
         if (amount >= 1_000_000_000) return String.format("%.1fB", amount / 1_000_000_000.0);
         if (amount >= 1_000_000) return String.format("%.1fM", amount / 1_000_000.0);

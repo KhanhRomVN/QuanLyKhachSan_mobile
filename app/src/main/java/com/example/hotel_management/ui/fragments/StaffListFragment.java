@@ -23,6 +23,10 @@ import com.example.hotel_management.ui.adapter.StaffAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Fragment hiển thị Danh sách Nhân viên.
+ * Hỗ trợ các chức năng: Xem danh sách nhân viên, Xem thông tin cá nhân hiện tại, Tìm kiếm, Đăng xuất và Chuyển tài khoản nhanh.
+ */
 public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffClickListener {
 
     private RecyclerView rvStaff;
@@ -35,7 +39,7 @@ public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffC
     private com.example.hotel_management.utils.SessionManager sessionManager;
     private Staff currentUser;
 
-    // Current User Views
+    // Các View hiển thị thông tin người dùng đang đăng nhập (Thẻ trên cùng)
     private View cardCurrentUser;
     private View viewCurrentUserAvatarBg;
     private TextView tvCurrentUserAvatarInitials, tvCurrentUserName, tvCurrentUserEmail;
@@ -44,6 +48,7 @@ public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffC
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Nạp layout fragment_staff_list
         View view = inflater.inflate(R.layout.fragment_staff_list, container, false);
         
         staffRepository = new com.example.hotel_management.data.db.StaffRepository(getContext());
@@ -58,10 +63,16 @@ public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffC
         return view;
     }
 
+    /**
+     * Tải danh sách toàn bộ nhân viên từ cơ sở dữ liệu.
+     */
     private void loadStaff() {
         allStaff = staffRepository.getAllStaff();
     }
 
+    /**
+     * Làm mới dữ liệu khi người dùng quay lại màn hình này.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -70,12 +81,15 @@ public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffC
         applyFilters();
     }
 
+    /**
+     * Ánh xạ các thành phần giao diện và thiết lập các sự kiện nút bấm.
+     */
     private void initViews(View view) {
         rvStaff = view.findViewById(R.id.rvStaff);
         etSearch = view.findViewById(R.id.etStaffSearch);
         tvStaffCount = view.findViewById(R.id.tvStaffCount);
         
-        // Current User UI
+        // UI người dùng hiện tại
         cardCurrentUser = view.findViewById(R.id.cardCurrentUser);
         viewCurrentUserAvatarBg = view.findViewById(R.id.viewCurrentUserAvatarBg);
         tvCurrentUserAvatarInitials = view.findViewById(R.id.tvCurrentUserAvatarInitials);
@@ -85,11 +99,13 @@ public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffC
         
         btnLogout.setOnClickListener(v -> handleLogout());
         
+        // Nút thêm nhân viên mới
         View btnAdd = view.findViewById(R.id.btnAddStaff);
         btnAdd.setOnClickListener(v -> {
             startActivity(new Intent(getContext(), StaffFormActivity.class));
         });
         
+        // Lắng nghe thay đổi ô tìm kiếm
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -102,9 +118,13 @@ public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffC
         });
     }
 
+    /**
+     * Cập nhật thông tin của người dùng đang đăng nhập lên thẻ thông tin trên cùng.
+     */
     private void updateCurrentUserUI() {
         String email = sessionManager.getUserEmail();
         currentUser = null;
+        // Tìm thông tin hồ sơ staff tương ứng với email đang đăng nhập
         for (Staff s : allStaff) {
             if (s.getEmail().equalsIgnoreCase(email)) {
                 currentUser = s;
@@ -117,7 +137,7 @@ public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffC
             tvCurrentUserEmail.setText(currentUser.getEmail());
             tvCurrentUserAvatarInitials.setText(currentUser.getAvatar());
             
-            // Avatar Background logic similar to DetailActivity
+            // Logic đổ màu Avatar ngẫu nhiên theo ký tự đầu
             int[] colors = {0xFF9a7340, 0xFF3464b4, 0xFF3a8a5a, 0xFFb47814, 0xFFc0392b};
             int colorIdx = Math.abs(currentUser.getAvatar().hashCode()) % colors.length;
             int baseColor = colors[colorIdx];
@@ -130,26 +150,31 @@ public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffC
             viewCurrentUserAvatarBg.setBackground(avatarBg);
             tvCurrentUserAvatarInitials.setTextColor(baseColor);
             
-            // Set click listener to view own profile
-            View card = getView() != null ? getView().findViewById(R.id.cardCurrentUser) : null;
-            if (card != null) {
-                card.setOnClickListener(v -> onStaffClick(currentUser));
-            }
+            // Click vào thẻ cá nhân để xem chi tiết thông tin của chính mình
+            cardCurrentUser.setOnClickListener(v -> onStaffClick(currentUser));
         }
     }
 
+    /**
+     * Phương thức tiện ích để điều chỉnh độ trong suốt (alpha) cho màu sắc UI.
+     */
     private int adjustAlpha(int color, float factor) {
         int alpha = Math.round(android.graphics.Color.alpha(color) * factor);
         if (alpha == 0) alpha = Math.round(255 * factor);
         return android.graphics.Color.argb(alpha, android.graphics.Color.red(color), android.graphics.Color.green(color), android.graphics.Color.blue(color));
     }
 
+    /**
+     * Xử lý đăng xuất tài khoản.
+     */
     private void handleLogout() {
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(getContext())
             .setTitle("Đăng xuất?")
             .setMessage("Bạn có chắc chắn muốn đăng xuất khỏi tài khoản này?")
             .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                // Xóa trạng thái đăng nhập trong Session
                 sessionManager.setLogin(false, "", "");
+                // Chuyển về màn hình Đăng nhập và xóa hết stack cũ
                 Intent intent = new Intent(getContext(), com.example.hotel_management.ui.auth.LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -158,22 +183,25 @@ public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffC
             .show();
     }
 
-
+    /**
+     * Thiết lập danh sách hiển thị nhân viên bằng RecyclerView.
+     */
     private void setupRecyclerView() {
         adapter = new StaffAdapter(filteredStaff, this);
         rvStaff.setLayoutManager(new LinearLayoutManager(getContext()));
         rvStaff.setAdapter(adapter);
     }
 
-
+    /**
+     * Lọc danh sách nhân viên: Tìm kiếm theo tên/email và lọc bỏ người dùng hiện tại khỏi danh sách hiển thị bên dưới.
+     */
     private void applyFilters() {
         String query = etSearch.getText().toString().toLowerCase();
- 
         filteredStaff.clear();
         String currentEmail = sessionManager.getUserEmail();
         
         for (Staff s : allStaff) {
-            // Filter out current user
+            // Không hiển thị chính mình trong danh sách danh bạ chung (vì đã có card trên cùng)
             if (s.getEmail().equalsIgnoreCase(currentEmail)) continue;
 
             boolean matchSearch = s.getName().toLowerCase().contains(query) || 
@@ -190,22 +218,29 @@ public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffC
         tvStaffCount.setText(filteredStaff.size() + " nhân viên");
     }
 
+    /**
+     * Xử lý click vào nhân viên: Chuyển sang màn hình Chi tiết nhân viên.
+     */
     @Override
     public void onStaffClick(Staff staff) {
-        android.util.Log.d("StaffDebug", "StaffListFragment: Đã click vào thẻ nhân viên: " + (staff != null ? staff.getName() : "NULL"));
         Intent intent = new Intent(getContext(), StaffDetailActivity.class);
         if (staff != null) {
             intent.putExtra("staff", staff);
-            android.util.Log.d("StaffDebug", "StaffListFragment: Đang bắt đầu StaffDetailActivity cho " + staff.getName());
         }
         startActivity(intent);
     }
 
+    /**
+     * Xử lý click chuyển đổi tài khoản (nếu được hỗ trợ bởi Adapter).
+     */
     @Override
     public void onSwitchAccountClick(Staff staff) {
         showFastSwitchDialog(staff);
     }
 
+    /**
+     * Giao diện hộp thoại chuyển đổi tài khoản nhanh (hỏi mật khẩu).
+     */
     private void showFastSwitchDialog(Staff staff) {
         com.google.android.material.dialog.MaterialAlertDialogBuilder builder = new com.google.android.material.dialog.MaterialAlertDialogBuilder(getContext());
         builder.setTitle("Đăng nhập nhanh");
@@ -226,10 +261,12 @@ public class StaffListFragment extends Fragment implements StaffAdapter.OnStaffC
 
         builder.setPositiveButton("Đăng nhập", (dialog, which) -> {
             String password = input.getText().toString();
+            // So sánh mật khẩu trực tiếp (Dùng cho demo hoặc hệ thống nội bộ đơn giản)
             if (password.equals(staff.getPassword())) {
                 sessionManager.setLogin(true, staff.getEmail(), staff.getRole().equalsIgnoreCase("admin") ? "admin" : "staff");
                 Toast.makeText(getContext(), "Đã chuyển sang tài khoản " + staff.getName(), Toast.LENGTH_SHORT).show();
                 
+                // Khởi động lại ứng dụng vào màn hình chính
                 Intent intent = new Intent(getContext(), com.example.hotel_management.MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

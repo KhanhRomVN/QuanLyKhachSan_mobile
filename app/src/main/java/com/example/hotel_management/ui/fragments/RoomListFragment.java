@@ -25,6 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Fragment hiển thị Danh sách các phòng trong khách sạn.
+ * Hỗ trợ tìm kiếm, lọc theo trạng thái phòng và thêm phòng mới.
+ */
 public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClickListener {
 
     private RecyclerView rvRooms;
@@ -37,11 +41,12 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
     private View layoutEmptyState;
     private com.example.hotel_management.data.db.RoomRepository roomRepository;
 
-    private String selectedStatus = "all";
+    private String selectedStatus = "all"; // Trạng thái đang được chọn để lọc (mặc định là Tất cả)
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Nạp giao diện từ fragment_room_list
         View view = inflater.inflate(R.layout.fragment_room_list, container, false);
 
         roomRepository = new com.example.hotel_management.data.db.RoomRepository(getContext());
@@ -55,6 +60,9 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         return view;
     }
 
+    /**
+     * Tải danh sách phòng từ Database.
+     */
     private void loadRooms() {
         allRooms = roomRepository.getAllRooms();
         if (allRooms == null) {
@@ -62,6 +70,9 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         }
     }
 
+    /**
+     * Cập nhật lại dữ liệu mỗi khi quay trở lại màn hình này.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -69,6 +80,9 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         applyFilters();
     }
 
+    /**
+     * Ánh xạ các View và thiết lập sự kiện nút bấm.
+     */
     private void initViews(View view) {
         rvRooms = view.findViewById(R.id.rvRooms);
         etSearch = view.findViewById(R.id.etSearch);
@@ -76,31 +90,41 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         layoutStatusChips = view.findViewById(R.id.layoutStatusChips);
         layoutEmptyState = view.findViewById(R.id.layoutEmptyState);
 
+        // Nút thêm phòng mới
         view.findViewById(R.id.btnAddRoom).setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), com.example.hotel_management.management.RoomFormActivity.class);
             startActivity(intent);
         });
     }
 
+    /**
+     * Khởi tạo danh sách bằng RecyclerView.
+     */
     private void setupRecyclerView() {
         adapter = new RoomAdapter(filteredRooms, this);
         rvRooms.setLayoutManager(new LinearLayoutManager(getContext()));
         rvRooms.setAdapter(adapter);
     }
 
+    /**
+     * Lắng nghe sự thay đổi văn bản trong ô tìm kiếm.
+     */
     private void setupSearch() {
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                applyFilters();
+                applyFilters(); // Lọc lại danh sách khi người dùng gõ
             }
             @Override
             public void afterTextChanged(Editable s) {}
         });
     }
 
+    /**
+     * Khởi tạo thanh bộ lọc trạng thái (Chips).
+     */
     private void setupStatusChips() {
         layoutStatusChips.removeAllViews();
         String[] statusKeys = {"all", "occupied", "vacant", "dirty", "maintenance"};
@@ -120,6 +144,9 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         }
     }
 
+    /**
+     * Đếm số lượng phòng theo trạng thái cụ thể.
+     */
     private int getCountForStatus(String status) {
         if (allRooms == null) return 0;
         if ("all".equals(status)) return allRooms.size();
@@ -130,6 +157,9 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         return count;
     }
 
+    /**
+     * Cập nhật màu sắc hiển thị của các nút trạng thái khi được chọn.
+     */
     private void updateStatusChipsSelection() {
         for (int i = 0; i < layoutStatusChips.getChildCount(); i++) {
             View chip = layoutStatusChips.getChildAt(i);
@@ -147,6 +177,9 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         }
     }
 
+    /**
+     * Cập nhật số lượng hiển thị trên các nút trạng thái.
+     */
     private void updateChipsCount() {
         for (int i = 0; i < layoutStatusChips.getChildCount(); i++) {
             View chip = layoutStatusChips.getChildAt(i);
@@ -160,6 +193,9 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         }
     }
 
+    /**
+     * Tạo một View hình nút (Chip) đại diện cho trạng thái.
+     */
     private TextView createChip(String label, boolean isSelected) {
         TextView chip = new TextView(getContext());
         chip.setText(label);
@@ -181,15 +217,20 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         return chip;
     }
 
+    /**
+     * Kết hợp cả tìm kiếm văn bản và lọc trạng thái để cập nhật danh sách hiển thị.
+     */
     private void applyFilters() {
         String query = etSearch.getText().toString().toLowerCase(Locale.getDefault());
 
         filteredRooms.clear();
         for (Room r : allRooms) {
+            // Kiểm tra khớp từ khóa tìm kiếm (Số phòng, Loại phòng, Tên khách)
             boolean matchSearch = r.getNumber().toLowerCase(Locale.getDefault()).contains(query) ||
                                  getTypeLabel(r.getType()).toLowerCase(Locale.getDefault()).contains(query) ||
                                  (r.getGuestName() != null && r.getGuestName().toLowerCase(Locale.getDefault()).contains(query));
 
+            // Kiểm tra khớp trạng thái được chọn
             boolean matchStatus = "all".equals(selectedStatus) || r.getStatus().equals(selectedStatus);
 
             if (matchSearch && matchStatus) {
@@ -204,6 +245,9 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         updateEmptyState();
     }
 
+    /**
+     * Chuyển đổi mã loại phòng sang tên tiếng Việt hiển thị ở UI.
+     */
     private String getTypeLabel(String type) {
         if (type == null) return "Đơn";
         switch (type.toLowerCase()) {
@@ -217,12 +261,18 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         }
     }
 
+    /**
+     * Cập nhật các nhãn số lượng trên UI.
+     */
     private void updateCounts() {
         if (allRooms == null) return;
         tvRoomCount.setText(filteredRooms.size() + " phòng");
         updateChipsCount();
     }
 
+    /**
+     * Hiển thị trạng thái trống nếu không tìm thấy kết quả phù hợp.
+     */
     private void updateEmptyState() {
         if (filteredRooms.isEmpty()) {
             layoutEmptyState.setVisibility(View.VISIBLE);
@@ -233,6 +283,9 @@ public class RoomListFragment extends Fragment implements RoomAdapter.OnRoomClic
         }
     }
 
+    /**
+     * Xử lý sự kiện khi click vào một phòng: Mở màn hình Chi tiết phòng.
+     */
     @Override
     public void onRoomClick(Room room) {
         Intent intent = new Intent(getContext(), RoomDetailActivity.class);

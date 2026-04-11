@@ -4,30 +4,40 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Lớp đại diện cho một Phòng trong khách sạn.
+ * Chứa đầy đủ thông tin về tình trạng phòng, giá cả, khách đang lưu trú và lịch sử đặt phòng.
+ */
 public class Room implements Serializable {
     private static final long serialVersionUID = 1L;
-    private int id;
-    private String number;
-    private String type; // single, double, quad
-    private String status; // occupied, vacant, dirty, maintenance
-    private double price;
-    private int maxGuests;
-    private String description;
-    private List<String> amenities;
-    private String guestName;
-    private String checkIn;
-    private String checkOut;
-    private int nights;
-    private String note;
-    private List<Guest> guests;
-    private List<BookingHistory> history;
+    private int id;                 // ID định danh phòng
+    private String number;          // Số phòng (ví dụ: 101, 202)
+    private String type;            // Loại phòng (single, double, quad)
+    private String status;          // Trạng thái (occupied: có khách, vacant: trống, dirty: phòng bẩn, maintenance: bảo trì)
+    private double price;           // Giá phòng mỗi đêm
+    private int maxGuests;          // Số lượng khách tối đa
+    private String description;     // Mô tả thêm về phòng
+    private List<String> amenities; // Danh sách tiện nghi (Wifi, Tivi, Điều hòa...)
+    private String guestName;       // Tên khách hàng đại diện (nếu đang có khách)
+    private String checkIn;         // Ngày giờ nhận phòng
+    private String checkOut;        // Ngày giờ dự kiến trả phòng
+    private int nights;             // Số đêm khách đăng ký ở
+    private String note;            // Ghi chú nội bộ về phòng
+    private List<Guest> guests;     // Danh sách đầy đủ các khách trong phòng
+    private List<BookingHistory> history; // Lịch sử các lần khách đã thuê phòng này
 
+    /**
+     * Khởi tạo một đối tượng phòng trống mặc định.
+     */
     public Room() {
         this.amenities = new ArrayList<>();
         this.guests = new ArrayList<>();
         this.history = new ArrayList<>();
     }
 
+    /**
+     * Khởi tạo phòng với các thông tin cơ bản.
+     */
     public Room(String number, String type, String status, double price) {
         this.number = number;
         this.type = type;
@@ -38,6 +48,7 @@ public class Room implements Serializable {
         this.history = new ArrayList<>();
     }
 
+    // --- Các phương thức Getter và Setter ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

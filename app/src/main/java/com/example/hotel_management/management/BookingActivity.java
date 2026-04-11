@@ -20,25 +20,31 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Hoạt động Đặt phòng (BookingActivity).
+ * Xử lý quy trình xác nhận đặt phòng cho khách hàng, bao gồm chọn ngày, 
+ * tính toán tổng phí và cập nhật trạng thái phòng trong hệ thống.
+ */
 public class BookingActivity extends AppCompatActivity {
 
-    private Room room;
-    private java.util.List<Customer> customers;
+    private Room room; // Phòng khách chọn đặt
+    private java.util.List<Customer> customers; // Danh sách các khách hàng sẽ ở trong phòng
 
     private TextView tvRoomInfo, tvRoomPrice;
     private android.widget.LinearLayout layoutCustomerCards;
     private TextView tvCheckInDate, tvCheckOutDate, tvNights, tvTotalPrice, tvPriceDetail;
     private MaterialButton btnDecreaseNights, btnIncreaseNights, btnConfirmBooking;
 
-    private Calendar checkInCalendar;
-    private int nights = 1;
-    private double pricePerNight;
+    private Calendar checkInCalendar; // Lịch lưu ngày nhận phòng (mặc định là hôm nay)
+    private int nights = 1; // Số đêm lưu trú (mặc định là 1)
+    private double pricePerNight; // Giá mỗi đêm của phòng
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
 
+        // Nhận đối tượng phòng và danh sách khách hàng từ Intent truyền sang
         room = (Room) getIntent().getSerializableExtra("room");
         customers = (java.util.List<Customer>) getIntent().getSerializableExtra("selectedCustomers");
 
@@ -49,7 +55,7 @@ public class BookingActivity extends AppCompatActivity {
         }
 
         pricePerNight = room.getPrice();
-        checkInCalendar = Calendar.getInstance();
+        checkInCalendar = Calendar.getInstance(); // Khởi tạo thời gian hiện tại
 
         initViews();
         setupData();
@@ -57,6 +63,9 @@ public class BookingActivity extends AppCompatActivity {
         updateDisplay();
     }
 
+    /**
+     * Ánh xạ các thành phần giao diện.
+     */
     private void initViews() {
         findViewById(R.id.btnBackBooking).setOnClickListener(v -> finish());
 
@@ -73,13 +82,16 @@ public class BookingActivity extends AppCompatActivity {
         btnConfirmBooking = findViewById(R.id.btnConfirmBooking);
     }
 
+    /**
+     * Hiển thị thông tin phòng và danh sách khách hàng lên giao diện.
+     */
     private void setupData() {
-        // Room info
+        // Thông tin phòng
         String typeLabel = getTypeLabel(room.getType());
         tvRoomInfo.setText("Phòng " + room.getNumber() + " · " + typeLabel);
         tvRoomPrice.setText(formatPrice(pricePerNight) + " VNĐ/đêm");
 
-        // Customer info
+        // Tạo thẻ hiển thị cho từng khách hàng trong danh sách
         layoutCustomerCards.removeAllViews();
         for (Customer c : customers) {
             View card = getLayoutInflater().inflate(R.layout.item_customer, layoutCustomerCards, false);
@@ -94,7 +106,7 @@ public class BookingActivity extends AppCompatActivity {
             String phone = c.getPhone() != null && !c.getPhone().isEmpty() ? c.getPhone() : "-";
             tvIdInfo.setText("CCCD: " + cccd + " | SĐT: " + phone);
             
-            // Initials & Avatar Styling (Squircle style)
+            // Tạo ảnh đại diện viết tắt và màu sắc ngẫu nhiên chuyên nghiệp
             if (c.getName() != null && !c.getName().isEmpty()) {
                 String initials = "";
                 String[] parts = c.getName().trim().split("\\s+");
@@ -112,41 +124,22 @@ public class BookingActivity extends AppCompatActivity {
                 android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
                 gd.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
                 gd.setCornerRadius(12 * getResources().getDisplayMetrics().density);
-                
-                int alphaBg = Math.round(255 * 0.1f);
-                int bgColor = Color.argb(alphaBg, Color.red(color), Color.green(color), Color.blue(color));
-                gd.setColor(bgColor);
-                
-                int alphaStroke = Math.round(255 * 0.25f);
-                int strokeColor = Color.argb(alphaStroke, Color.red(color), Color.green(color), Color.blue(color));
-                gd.setStroke((int)(1 * getResources().getDisplayMetrics().density), strokeColor);
+                gd.setColor(Color.argb(Math.round(255 * 0.1f), Color.red(color), Color.green(color), Color.blue(color)));
+                gd.setStroke((int)(1 * getResources().getDisplayMetrics().density), Color.argb(Math.round(255 * 0.25f), Color.red(color), Color.green(color), Color.blue(color)));
                 
                 avatarBg.setBackground(gd);
                 tvInitials.setTextColor(color);
             }
             
-            // Card style for booking summary
-            com.google.android.material.card.MaterialCardView materialCard = (com.google.android.material.card.MaterialCardView) card;
-            materialCard.setCardBackgroundColor(getResources().getColor(R.color.card_bg));
-            materialCard.setStrokeColor(android.content.res.ColorStateList.valueOf(getResources().getColor(R.color.card_border)));
-            materialCard.setStrokeWidth((int)(1 * getResources().getDisplayMetrics().density));
-            
-            android.widget.LinearLayout.LayoutParams params = (android.widget.LinearLayout.LayoutParams) materialCard.getLayoutParams();
-            if (params == null) {
-                params = new android.widget.LinearLayout.LayoutParams(
-                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
-            }
-            params.setMargins(0, 0, 0, (int)(10 * getResources().getDisplayMetrics().density));
-            materialCard.setLayoutParams(params);
-            
             layoutCustomerCards.addView(card);
         }
     }
 
+    /**
+     * Thiết lập các sự kiện nút bấm.
+     */
     private void setupListeners() {
-        // Check-in date interaction removed as requested
-
+        // Giảm số đêm (tối thiểu 1)
         btnDecreaseNights.setOnClickListener(v -> {
             if (nights > 1) {
                 nights--;
@@ -154,6 +147,7 @@ public class BookingActivity extends AppCompatActivity {
             }
         });
 
+        // Tăng số đêm (tối đa 30)
         btnIncreaseNights.setOnClickListener(v -> {
             if (nights < 30) {
                 nights++;
@@ -161,86 +155,48 @@ public class BookingActivity extends AppCompatActivity {
             }
         });
 
+        // Nút xác nhận đặt phòng
         btnConfirmBooking.setOnClickListener(v -> confirmBooking());
     }
 
-    private void showDatePicker() {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-            this,
-            (view, year, month, dayOfMonth) -> {
-                checkInCalendar.set(Calendar.YEAR, year);
-                checkInCalendar.set(Calendar.MONTH, month);
-                checkInCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateDisplay();
-            },
-            checkInCalendar.get(Calendar.YEAR),
-            checkInCalendar.get(Calendar.MONTH),
-            checkInCalendar.get(Calendar.DAY_OF_MONTH)
-        );
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 86400000);
-        datePickerDialog.show();
-    }
-
+    /**
+     * Cập nhật hiển thị ngày tháng và tổng tiền trên giao diện.
+     */
     private void updateDisplay() {
-        // Check-in date
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        
+        // Hiển thị ngày nhận phòng
         String checkInStr = sdf.format(checkInCalendar.getTime());
-        
-        Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR_OF_DAY, 0);
-        today.set(Calendar.MINUTE, 0);
-        today.set(Calendar.SECOND, 0);
-        today.set(Calendar.MILLISECOND, 0);
-        
-        Calendar checkInCopy = (Calendar) checkInCalendar.clone();
-        checkInCopy.set(Calendar.HOUR_OF_DAY, 0);
-        checkInCopy.set(Calendar.MINUTE, 0);
-        checkInCopy.set(Calendar.SECOND, 0);
-        checkInCopy.set(Calendar.MILLISECOND, 0);
-        
-        if (checkInCopy.equals(today)) {
-            tvCheckInDate.setText("Hôm nay · " + checkInStr);
-        } else if (checkInCopy.getTimeInMillis() == today.getTimeInMillis() + 86400000) {
-            tvCheckInDate.setText("Ngày mai · " + checkInStr);
-        } else {
-            tvCheckInDate.setText(checkInStr);
-        }
+        tvCheckInDate.setText(checkInStr);
 
-        // Check-out date
+        // Tính toán và hiển thị ngày trả phòng dự kiến
         Calendar checkOutCalendar = (Calendar) checkInCalendar.clone();
         checkOutCalendar.add(Calendar.DAY_OF_YEAR, nights);
         String checkOutStr = sdf.format(checkOutCalendar.getTime());
-        
-        Calendar tomorrow = (Calendar) today.clone();
-        tomorrow.add(Calendar.DAY_OF_YEAR, 1);
-        
-        if (checkOutCalendar.equals(today)) {
-            tvCheckOutDate.setText("Hôm nay · " + checkOutStr);
-        } else if (checkOutCalendar.equals(tomorrow)) {
-            tvCheckOutDate.setText("Ngày mai · " + checkOutStr);
-        } else {
-            tvCheckOutDate.setText(checkOutStr);
-        }
+        tvCheckOutDate.setText(checkOutStr);
 
-        // Nights
+        // Cập nhật số đêm và tổng tiền
         tvNights.setText(String.valueOf(nights));
-
-        // Total price
         double totalPrice = pricePerNight * nights;
         tvTotalPrice.setText(formatPrice(totalPrice) + " VNĐ");
         tvPriceDetail.setText(nights + " đêm × " + formatPrice(pricePerNight) + "K");
     }
 
+    /**
+     * Thực hiện lưu trữ thông tin đặt phòng vào Database.
+     */
     private void confirmBooking() {
-        // Update room status in database
         RoomRepository repo = new RoomRepository(this);
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String checkInStr = sdf.format(checkInCalendar.getTime());
+        
         Calendar checkOutCalendar = (Calendar) checkInCalendar.clone();
         checkOutCalendar.add(Calendar.DAY_OF_YEAR, nights);
         String checkOutStr = sdf.format(checkOutCalendar.getTime());
         
+        // Chuyển đổi danh sách khách hàng sang chuỗi định dạng đặc biệt để lưu vào trường 'guests' trong DB
+        // Định dạng: Tên|CCCD|SĐT;;Tên|CCCD|SĐT
         StringBuilder guestBuilder = new StringBuilder();
         for (int i = 0; i < customers.size(); i++) {
             Customer c = customers.get(i);
@@ -252,8 +208,10 @@ public class BookingActivity extends AppCompatActivity {
             }
         }
         
+        // Cập nhật trạng thái phòng thành 'occupied' (đang có khách) và lưu thông tin khách trú ngụ
         repo.updateRoomStatus(room.getId(), "occupied", guestBuilder.toString(), checkInStr, checkOutStr);
 
+        // Hiển thị thông báo thành công
         StringBuilder guestNames = new StringBuilder();
         for (int i = 0; i < customers.size(); i++) {
             guestNames.append(customers.get(i).getName());
@@ -263,36 +221,32 @@ public class BookingActivity extends AppCompatActivity {
         Toast.makeText(this, 
             "Đặt phòng thành công!\n" +
             "Khách: " + guestNames.toString() + "\n" +
-            "Phòng: " + room.getNumber() + "\n" +
-            "Số đêm: " + nights, 
+            "Phòng: " + room.getNumber(), 
             Toast.LENGTH_LONG).show();
         
+        // Trả kết quả về cho màn hình trước đó và đóng Activity
         Intent result = new Intent();
         result.putExtra("roomId", room.getId());
-        if (!customers.isEmpty()) {
-            result.putExtra("customerId", customers.get(0).getId());
-            
-            ArrayList<Integer> customerIds = new ArrayList<>();
-            for (Customer c : customers) {
-                customerIds.add(c.getId());
-            }
-            result.putIntegerArrayListExtra("customerIds", customerIds);
-        }
-        result.putExtra("nights", nights);
         setResult(RESULT_OK, result);
         finish();
     }
 
+    /**
+     * Chuyển mã loại phòng sang nhãn tiếng Việt.
+     */
     private String getTypeLabel(String type) {
         if (type == null) return "Đơn";
         switch (type.toLowerCase()) {
-            case "single": return "Đơn";
-            case "double": return "Đôi";
-            case "quad": return "4 người";
+            case "single": return "Phòng đơn";
+            case "double": return "Phòng đôi";
+            case "quad": return "Phòng 4 người";
             default: return type;
         }
     }
 
+    /**
+     * Định dạng giá tiền rút gọn (Ví dụ: 1.5M, 500K).
+     */
     private String formatPrice(double price) {
         if (price >= 1000000) {
             return String.format(Locale.getDefault(), "%.1fM", price / 1000000.0);

@@ -2,19 +2,26 @@ package com.example.hotel_management.data.model;
 
 import java.io.Serializable;
 
+/**
+ * Lớp đại diện cho một Nhân viên trong hệ thống khách sạn.
+ * Chứa thông tin hồ sơ chi tiết và các trạng thái làm việc.
+ */
 public class Staff implements Serializable {
-    private int id;
-    private String name;
-    private String email;
-    private String password;
-    private String phone;
-    private String department;
-    private String role;
-    private String status; // active, inactive
-    private String joinDate;
-    private String avatar; // Initials
-    private String note;
+    private int id;             // ID định danh nhân viên
+    private String name;        // Họ và tên
+    private String email;       // Email liên lạc/đăng nhập
+    private String password;    // Mật khẩu (dùng cho bảo mật)
+    private String phone;       // Số điện thoại
+    private String department;  // Phòng ban làm việc
+    private String role;        // Vai trò (admin, staff, ...)
+    private String status;      // Trạng thái (active: đang làm, inactive: đã nghỉ)
+    private String joinDate;    // Ngày vào làm
+    private String avatar;      // Chữ cái đầu của tên dùng làm ảnh đại diện tạm thời
+    private String note;        // Ghi chú thêm
 
+    /**
+     * Constructor dùng khi tạo mới nhân viên (chưa có ID và mật khẩu).
+     */
     public Staff(String name, String email, String phone, String department, String role, String status, String joinDate) {
         this.name = name;
         this.email = email;
@@ -23,9 +30,12 @@ public class Staff implements Serializable {
         this.role = role;
         this.status = status;
         this.joinDate = joinDate;
-        this.avatar = name.substring(0, 1).toUpperCase(); // Default avatar
+        this.avatar = name.substring(0, 1).toUpperCase(); // Mặc định lấy chữ cái đầu
     }
 
+    /**
+     * Constructor đầy đủ dùng khi lấy dữ liệu từ cơ sở dữ liệu.
+     */
     public Staff(int id, String name, String email, String password, String phone, String department, String role, String status, String joinDate, String avatar, String note) {
         this.id = id;
         this.name = name;
@@ -40,7 +50,7 @@ public class Staff implements Serializable {
         this.note = note;
     }
 
-    // Getters and Setters
+    // --- Các phương thức Getter và Setter ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getName() { return name; }

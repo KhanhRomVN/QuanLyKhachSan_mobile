@@ -14,6 +14,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Lớp quản lý các thao tác truy xuất dữ liệu (Repository) cho bảng Phòng (Room).
+ * Đây là thành phần quan trọng nhất xử lý logic đặt phòng, trả phòng và lịch sử phòng.
+ */
 public class RoomRepository {
     private DatabaseHelper dbHelper;
 
@@ -21,6 +25,9 @@ public class RoomRepository {
         dbHelper = new DatabaseHelper(context);
     }
 
+    /**
+     * Thêm một phòng mới vào hệ thống.
+     */
     public long insertRoom(Room room) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -34,6 +41,7 @@ public class RoomRepository {
         values.put(DatabaseHelper.COLUMN_ROOM_CHECKOUT, room.getCheckOut());
         values.put(DatabaseHelper.COLUMN_ROOM_MAX_GUESTS, room.getMaxGuests());
         
+        // Chuyển danh sách tiện ích thành chuỗi phân cách bởi dấu phẩy để lưu vào DB
         if (room.getAmenities() != null) {
             String amenitiesStr = String.join(",", room.getAmenities());
             values.put(DatabaseHelper.COLUMN_ROOM_AMENITIES, amenitiesStr);
@@ -42,6 +50,9 @@ public class RoomRepository {
         return db.insert(DatabaseHelper.TABLE_ROOMS, null, values);
     }
 
+    /**
+     * Cập nhật toàn bộ thông tin của một phòng.
+     */
     public int updateRoom(Room room) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -64,6 +75,9 @@ public class RoomRepository {
                 new String[]{String.valueOf(room.getId())});
     }
 
+    /**
+     * Cập nhật trạng thái thuê phòng (Dùng khi Check-in).
+     */
     public int updateRoomStatus(int roomId, String status, String guestName, String checkIn, String checkOut) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -75,12 +89,19 @@ public class RoomRepository {
                 new String[]{String.valueOf(roomId)});
     }
 
+    /**
+     * Xóa phòng khỏi hệ thống.
+     */
     public int deleteRoom(int id) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         return db.delete(DatabaseHelper.TABLE_ROOMS, DatabaseHelper.COLUMN_ID + "=?", 
                 new String[]{String.valueOf(id)});
     }
 
+    /**
+     * Lấy danh sách toàn bộ phòng trong khách sạn.
+     * Tự động tính toán số đêm và parse danh sách khách nếu phòng đang có người ở.
+     */
     @SuppressLint("Range")
     public List<Room> getAllRooms() {
         List<Room> rooms = new ArrayList<>();
@@ -103,6 +124,7 @@ public class RoomRepository {
                 room.setCheckOut(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_ROOM_CHECKOUT)));
                 room.setMaxGuests(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ROOM_MAX_GUESTS)));
 
+                // Chuyển chuỗi tiện ích từ DB thành List
                 String amenitiesStr = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_ROOM_AMENITIES));
                 List<String> amenities = new ArrayList<>();
                 if (amenitiesStr != null && !amenitiesStr.isEmpty()) {
@@ -115,15 +137,13 @@ public class RoomRepository {
                 }
                 room.setAmenities(amenities);
 
-                room.setAmenities(amenities);
-
-                // Parse guests and calculate nights
+                // Nếu có người ở, tính toán thêm các thông tin phụ trợ để hiển thị
                 if ("occupied".equals(room.getStatus())) {
                     room.setGuests(parseGuests(room.getGuestName()));
                     room.setNights(calculateNights(room.getCheckIn(), room.getCheckOut()));
                 }
 
-                // Fetch history
+                // Lấy lịch sử giao dịch gần đây của phòng này
                 room.setHistory(getRoomHistory(room.getNumber()));
 
                 rooms.add(room);
@@ -133,6 +153,9 @@ public class RoomRepository {
         return rooms;
     }
 
+    /**
+     * Tìm kiếm phòng theo ID.
+     */
     @SuppressLint("Range")
     public Room getRoomById(int id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -167,21 +190,21 @@ public class RoomRepository {
                 }
             }
             room.setAmenities(amenities);
-            room.setAmenities(amenities);
 
-            // Parse guests and calculate nights
             if ("occupied".equals(room.getStatus())) {
                 room.setGuests(parseGuests(room.getGuestName()));
                 room.setNights(calculateNights(room.getCheckIn(), room.getCheckOut()));
             }
 
-            // Fetch history
             room.setHistory(getRoomHistory(room.getNumber()));
         }
         cursor.close();
         return room;
     }
 
+    /**
+     * Giải mã chuỗi danh sách khách hàng được lưu dưới định dạng đặc biệt (| và ;;).
+     */
     private List<Guest> parseGuests(String guestStr) {
         List<Guest> guests = new ArrayList<>();
         if (guestStr == null || guestStr.isEmpty()) return guests;
@@ -202,11 +225,17 @@ public class RoomRepository {
         return guests;
     }
 
+    /**
+     * Quy trình Trả phòng (Check-out).
+     * Thực hiện trong một Transaction để đảm bảo tính toàn vẹn dữ liệu:
+     * 1. Cập nhật trạng thái phòng thành 'vacant' (trống).
+     * 2. Tạo một bản ghi giao dịch (Doanh thu) mới.
+     */
     public boolean checkoutRoom(Room room, double amount, int nights) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.beginTransaction();
+        db.beginTransaction(); // Bắt đầu giao dịch SQL
         try {
-            // 1. Reset Room Status
+            // Bước 1: Reset trạng thái phòng
             ContentValues roomValues = new ContentValues();
             roomValues.put(DatabaseHelper.COLUMN_ROOM_STATUS, "vacant");
             roomValues.put(DatabaseHelper.COLUMN_ROOM_GUEST, (String) null);
@@ -216,30 +245,33 @@ public class RoomRepository {
             db.update(DatabaseHelper.TABLE_ROOMS, roomValues, DatabaseHelper.COLUMN_ID + "=?",
                     new String[]{String.valueOf(room.getId())});
 
-            // 2. Insert Transaction
+            // Bước 2: Tạo bản ghi Giao dịch (Doanh thu)
             ContentValues txValues = new ContentValues();
             txValues.put(DatabaseHelper.COLUMN_TX_ID, "TX" + System.currentTimeMillis());
             txValues.put(DatabaseHelper.COLUMN_TX_TITLE, "Thanh toán phòng " + room.getNumber());
             txValues.put(DatabaseHelper.COLUMN_TX_ROOM, room.getNumber());
             txValues.put(DatabaseHelper.COLUMN_TX_GUEST, room.getGuestName());
             txValues.put(DatabaseHelper.COLUMN_TX_AMOUNT, amount);
-            txValues.put(DatabaseHelper.COLUMN_TX_TYPE, "income");
+            txValues.put(DatabaseHelper.COLUMN_TX_TYPE, "income"); // Loại thu nhập
             txValues.put(DatabaseHelper.COLUMN_TX_DATE, new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date()));
-            txValues.put(DatabaseHelper.COLUMN_TX_STATUS, "completed");
+            txValues.put(DatabaseHelper.COLUMN_TX_STATUS, "completed"); // Trạng thái hoàn tất
             txValues.put(DatabaseHelper.COLUMN_TX_NIGHTS, nights);
             txValues.put(DatabaseHelper.COLUMN_TX_CHECKIN, room.getCheckIn());
             
             db.insert(DatabaseHelper.TABLE_TRANSACTIONS, null, txValues);
 
-            db.setTransactionSuccessful();
+            db.setTransactionSuccessful(); // Xác nhận thành công
             return true;
         } catch (Exception e) {
             return false;
         } finally {
-            db.endTransaction();
+            db.endTransaction(); // Kết thúc giao dịch
         }
     }
 
+    /**
+     * Lấy lịch sử tất cả các lần thuê của một phòng dựa trên số phòng.
+     */
     @SuppressLint("Range")
     public List<com.example.hotel_management.data.model.BookingHistory> getRoomHistory(String roomNumber) {
         List<com.example.hotel_management.data.model.BookingHistory> historyList = new ArrayList<>();
@@ -271,6 +303,10 @@ public class RoomRepository {
         return historyList;
     }
 
+    /**
+     * Tính toán số đêm ở dựa trên ngày Check-in và Check-out.
+     * Trả về tối thiểu là 1 đêm.
+     */
     private int calculateNights(String checkIn, String checkOut) {
         if (checkIn == null || checkOut == null || checkIn.isEmpty() || checkOut.isEmpty()) return 1;
         try {

@@ -12,14 +12,22 @@ import com.example.hotel_management.R;
 import com.example.hotel_management.data.model.Staff;
 import java.util.List;
 
+/**
+ * Bộ điều phối hiển thị Nhân viên (StaffAdapter).
+ * Hiển thị danh sách nhân viên với các thông tin cơ bản và vai trò. 
+ * Hỗ trợ chuyển đổi giao diện dựa trên quyền hạn (Admin/Staff).
+ */
 public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHolder> {
 
     private List<Staff> staffList;
     private OnStaffClickListener listener;
 
+    /**
+     * Interface xử lý các sự kiện tương tác với nhân viên.
+     */
     public interface OnStaffClickListener {
-        void onStaffClick(Staff staff);
-        void onSwitchAccountClick(Staff staff);
+        void onStaffClick(Staff staff); // Xem chi tiết
+        void onSwitchAccountClick(Staff staff); // Đăng nhập nhanh vào tài khoản này
     }
 
     public StaffAdapter(List<Staff> staffList, OnStaffClickListener listener) {
@@ -30,6 +38,7 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHol
     @NonNull
     @Override
     public StaffViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Nạp giao diện item_staff
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_staff, parent, false);
         return new StaffViewHolder(view);
     }
@@ -45,6 +54,9 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHol
         return staffList.size();
     }
 
+    /**
+     * Lớp lưu trữ tham chiếu các View của một dòng nhân viên.
+     */
     static class StaffViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvEmail, tvRoleBadge;
         android.widget.ImageButton btnSwitch;
@@ -57,12 +69,15 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHol
             btnSwitch = itemView.findViewById(R.id.btnSwitchAccount);
         }
 
+        /**
+         * Gán dữ liệu nhân viên và thiết lập giao diện dựa trên quyền hạn.
+         */
         public void bind(Staff staff, OnStaffClickListener listener) {
             tvName.setText(staff.getName());
             tvEmail.setText(staff.getEmail());
             tvRoleBadge.setText(staff.getRole());
 
-            // Permissions / Disabled look
+            // Logic hiển thị mờ/rõ dựa trên quyền hạn truy cập thông tin
             com.example.hotel_management.utils.SessionManager sessionManager = new com.example.hotel_management.utils.SessionManager(itemView.getContext());
             String currentEmail = sessionManager.getUserEmail();
             String currentRole = sessionManager.getUserRole();
@@ -70,13 +85,14 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHol
             boolean isAdmin = "admin".equalsIgnoreCase(currentRole);
             boolean isSelf = staff.getEmail().equalsIgnoreCase(currentEmail);
             
+            // Nếu là Admin hoặc xem chính mình thì hiển thị rõ nét
             if (isAdmin || isSelf) {
                 itemView.setAlpha(1.0f);
             } else {
-                itemView.setAlpha(0.6f);
+                itemView.setAlpha(0.6f); // Nhân viên bình thường chỉ thấy mờ thông tin đồng nghiệp khác
             }
 
-            // Role Badge styling
+            // Thiết lập phong cách nhãn (Badge) theo vai trò
             boolean isManager = staff.getRole().equalsIgnoreCase("Quản lý") || 
                                staff.getRole().equalsIgnoreCase("Admin") || 
                                staff.getRole().equalsIgnoreCase("Trưởng ca");
@@ -85,10 +101,12 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHol
             if (background instanceof GradientDrawable) {
                 GradientDrawable roleBg = (GradientDrawable) background.mutate();
                 if (isManager) {
+                    // Phong cách cho cấp quản lý (Màu nâu vàng đặc trưng của app)
                     roleBg.setColor(0x1A9a7340);
                     roleBg.setStroke(2, 0x409a7340);
                     tvRoleBadge.setTextColor(0xFF9a7340);
                 } else {
+                    // Phong cách cho nhân viên bình thường (Màu xám trung tính)
                     roleBg.setColor(0x0D000000);
                     roleBg.setStroke(2, 0x1A000000);
                     tvRoleBadge.setTextColor(0xFF7a7568);

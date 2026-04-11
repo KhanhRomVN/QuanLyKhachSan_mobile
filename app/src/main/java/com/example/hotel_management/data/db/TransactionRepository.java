@@ -9,6 +9,10 @@ import com.example.hotel_management.data.model.Transaction;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Lớp quản lý các thao tác dữ liệu (Repository) liên quan đến Giao dịch (Transactions).
+ * Chịu trách nhiệm lưu trữ và truy xuất lịch sử doanh thu của khách sạn.
+ */
 public class TransactionRepository {
     private DatabaseHelper dbHelper;
 
@@ -16,6 +20,10 @@ public class TransactionRepository {
         dbHelper = new DatabaseHelper(context);
     }
 
+    /**
+     * Chèn một giao dịch mới vào cơ sở dữ liệu.
+     * @return ID của dòng mới được chèn.
+     */
     public long insertTransaction(Transaction transaction) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -32,6 +40,10 @@ public class TransactionRepository {
         return db.insert(DatabaseHelper.TABLE_TRANSACTIONS, null, values);
     }
 
+    /**
+     * Lấy danh sách tất cả các giao dịch trong hệ thống.
+     * Sắp xếp theo ngày tháng giảm dần (Mới nhất lên đầu).
+     */
     @SuppressLint("Range")
     public List<Transaction> getAllTransactions() {
         List<Transaction> transactions = new ArrayList<>();
@@ -41,6 +53,7 @@ public class TransactionRepository {
 
         if (cursor.moveToFirst()) {
             do {
+                // Ánh xạ từ dòng dữ liệu Cursor sang đối tượng Transaction
                 Transaction trans = new Transaction(
                     cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TX_ID)),
                     cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TX_TITLE)),

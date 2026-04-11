@@ -19,11 +19,17 @@ import com.google.android.material.chip.ChipGroup;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Hoạt động Chi tiết Phòng (RoomDetailActivity).
+ * Quản lý việc hiển thị thông tin phòng, danh sách khách đang ở, lịch sử đặt phòng 
+ * và các thao tác nghiệp vụ như Đặt phòng, Trả phòng (Thanh toán).
+ */
 public class RoomDetailActivity extends AppCompatActivity {
 
-    private Room room;
-    private int currentTab = 0; // 0: info, 1: guests, 2: history
+    private Room room; // Đối tượng phòng đang thao tác
+    private int currentTab = 0; // Trang hiện tại (0: thông tin, 1: khách ở, 2: lịch sử)
 
+    // Các thành phần giao diện
     private TextView tvTitle, tvSubtitle, tvStatusBadge;
     private TextView tvHeroNumber, tvHeroType, tvHeroPrice;
     private LinearLayout layoutTabInfo, layoutTabGuests, layoutTabHistory;
@@ -40,6 +46,7 @@ public class RoomDetailActivity extends AppCompatActivity {
         try {
             setContentView(R.layout.activity_room_detail);
 
+            // Nhận dữ liệu phòng được truyền từ danh sách
             room = (Room) getIntent().getSerializableExtra("room");
             if (room == null) {
                 Toast.makeText(this, "Lỗi: không tìm thấy phòng", Toast.LENGTH_SHORT).show();
@@ -56,6 +63,9 @@ public class RoomDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Ánh xạ các thành phần giao diện và thiết lập sự kiện click.
+     */
     private void initViews() {
         findViewById(R.id.btnBackRoomDetail).setOnClickListener(v -> finish());
 
@@ -65,44 +75,60 @@ public class RoomDetailActivity extends AppCompatActivity {
         tvHeroNumber = findViewById(R.id.tvHeroNumber);
         tvHeroType = findViewById(R.id.tvHeroType);
         tvHeroPrice = findViewById(R.id.tvHeroPrice);
+        
         layoutTabInfo = findViewById(R.id.layoutTabInfo);
         layoutTabGuests = findViewById(R.id.layoutTabGuests);
         layoutTabHistory = findViewById(R.id.layoutTabHistory);
+        
         tabInfo = findViewById(R.id.tabInfo);
         tabGuests = findViewById(R.id.tabGuests);
         tabHistory = findViewById(R.id.tabHistory);
+        
         chipGroupAmenities = findViewById(R.id.chipGroupAmenities);
         cardAmenities = findViewById(R.id.cardAmenities);
         cardNote = findViewById(R.id.cardNote);
         cardActions = findViewById(R.id.cardActions);
         tvNote = findViewById(R.id.tvNote);
+        
         rowStatus = findViewById(R.id.rowStatus);
         rowType = findViewById(R.id.rowType);
         rowMaxGuests = findViewById(R.id.rowMaxGuests);
         rowPrice = findViewById(R.id.rowPrice);
 
+        // Thiết lập chuyển đổi Tab
         tabInfo.setOnClickListener(v -> switchTab(0));
         tabGuests.setOnClickListener(v -> switchTab(1));
         tabHistory.setOnClickListener(v -> switchTab(2));
 
+        // Nút Chỉnh sửa phòng
         findViewById(R.id.btnEdit).setOnClickListener(v -> {
             Intent intent = new Intent(this, RoomFormActivity.class);
             intent.putExtra("room", room);
             startActivity(intent);
         });
 
+        // Nút Xóa phòng
         findViewById(R.id.btnDelete).setOnClickListener(v -> showDeleteConfirmation());
     }
 
+    /**
+     * Cập nhật giao diện thanh Tab.
+     */
     private void setupTabs() {
         updateTabUI();
     }
 
+    /**
+     * Thực hiện chuyển đổi giữa các Tab chức năng.
+     */
     private void switchTab(int tab) {
         currentTab = tab;
         updateTabUI();
     }
 
+    /**
+     * Thay đổi màu sắc nhãn Tab và ẩn/hiện nội dung tương ứng.
+     */
     private void updateTabUI() {
         int activeColor = Color.parseColor("#1a1810");
         int inactiveColor = Color.parseColor("#7a7568");
@@ -119,11 +145,12 @@ public class RoomDetailActivity extends AppCompatActivity {
         layoutTabGuests.setVisibility(currentTab == 1 ? View.VISIBLE : View.GONE);
         layoutTabHistory.setVisibility(currentTab == 2 ? View.VISIBLE : View.GONE);
 
-        // Action buttons only visible on info tab
+        // Nút hành động (Sửa/Xóa) chỉ xuất hiện ở tab Thông tin
         if (cardActions != null) {
             cardActions.setVisibility(currentTab == 0 ? View.VISIBLE : View.GONE);
         }
 
+        // Tải nội dung cụ thể cho từng tab
         if (currentTab == 1) {
             setupGuestsTab();
         } else if (currentTab == 2) {
@@ -131,10 +158,13 @@ public class RoomDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Cập nhật toàn bộ dữ liệu phòng lên giao diện.
+     */
     private void updateRoomData() {
         tvTitle.setText("Phòng " + room.getNumber());
         String typeLabel = getTypeLabel(room.getType());
-        tvSubtitle.setText(typeLabel + " · " + room.getMaxGuests() + " người");
+        tvSubtitle.setText(typeLabel + " · " + room.getMaxGuests() + " khách");
 
         tvHeroNumber.setText(room.getNumber());
         tvHeroType.setText(typeLabel);
@@ -143,7 +173,7 @@ public class RoomDetailActivity extends AppCompatActivity {
         setupStatus();
         setupInfoRows();
 
-        // Amenities
+        // Hiển thị danh sách tiện nghi bằng Chip (Wifi, Điều hòa...)
         List<String> amenities = room.getAmenities();
         if (amenities != null && !amenities.isEmpty()) {
             cardAmenities.setVisibility(View.VISIBLE);
@@ -156,35 +186,37 @@ public class RoomDetailActivity extends AppCompatActivity {
             cardAmenities.setVisibility(View.GONE);
         }
 
-        // Note
+        // Hiển thị Ghi chú nội bộ
         if (room.getNote() != null && !room.getNote().isEmpty()) {
             tvNote.setText(room.getNote());
         } else {
             tvNote.setText("Không có ghi chú");
         }
 
-        // Update guest tab label
+        // Cập nhật số lượng khách và lịch sử trên nhãn Tab
         List<Guest> guests = room.getGuests();
         int guestCount = (guests != null) ? guests.size() : 0;
         tabGuests.setText("Khách (" + guestCount + ")");
 
-        // Update history tab label
         List<BookingHistory> history = room.getHistory();
         if (history != null) {
             tabHistory.setText("Lịch sử (" + history.size() + ")");
         }
     }
 
+    /**
+     * Hiển thị các hàng thông tin chi tiết (Trạng thái, Loại, Giá).
+     */
     private void setupInfoRows() {
         populateInfoRow(rowStatus, "", "TRẠNG THÁI", getStatusLabel(room.getStatus()));
-        // Type row
         populateInfoRow(rowType, "", "LOẠI PHÒNG", getTypeLabel(room.getType()));
-        // Max guests row
-        populateInfoRow(rowMaxGuests, "", "TỐI ĐA", room.getMaxGuests() + " người");
-        // Price row
+        populateInfoRow(rowMaxGuests, "", "TỐI ĐA", room.getMaxGuests() + " khách");
         populateInfoRow(rowPrice, "", "GIÁ PHÒNG", formatPrice(room.getPrice()) + " VNĐ/đêm");
     }
 
+    /**
+     * Điền thông tin vào một hàng cụ thể.
+     */
     private void populateInfoRow(View row, String icon, String label, String value) {
         if (row == null) return;
         TextView tvIcon = row.findViewById(R.id.tvRowIcon);
@@ -196,6 +228,9 @@ public class RoomDetailActivity extends AppCompatActivity {
         if (tvValue != null) tvValue.setText(value);
     }
 
+    /**
+     * Chuyển đổi mã trạng thái sang tiếng Việt.
+     */
     private String getStatusLabel(String status) {
         switch (status) {
             case "occupied": return "Có khách";
@@ -206,6 +241,9 @@ public class RoomDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Tạo giao diện Chip đẹp mắt cho phần tiện nghi.
+     */
     private Chip createChip(String text) {
         Chip chip = new Chip(this);
         chip.setText(text);
@@ -220,10 +258,13 @@ public class RoomDetailActivity extends AppCompatActivity {
         return chip;
     }
 
+    /**
+     * Quản lý màu sắc giao diện theo trạng thái phòng (Xanh: Trống, Xanh dương: Có khách, Vàng: Cần dọn, Đỏ: Bảo trì).
+     */
     private void setupStatus() {
         String status = room.getStatus();
         int badgeBg, badgeStroke, badgeText, numberBg, numberText;
-        String label, emoji;
+        String label;
 
         switch (status) {
             case "occupied":
@@ -233,7 +274,6 @@ public class RoomDetailActivity extends AppCompatActivity {
                 numberBg = Color.parseColor("#1A64A0F0");
                 numberText = Color.parseColor("#80aaee");
                 label = "Có khách";
-                emoji = "";
                 break;
             case "vacant":
                 badgeBg = Color.parseColor("#1A6FCF97");
@@ -242,7 +282,6 @@ public class RoomDetailActivity extends AppCompatActivity {
                 numberBg = Color.parseColor("#1A6FCF97");
                 numberText = Color.parseColor("#6ec98a");
                 label = "Trống";
-                emoji = "";
                 break;
             case "dirty":
                 badgeBg = Color.parseColor("#1AFBBF24");
@@ -251,7 +290,6 @@ public class RoomDetailActivity extends AppCompatActivity {
                 numberBg = Color.parseColor("#1AFBBF24");
                 numberText = Color.parseColor("#f0b43c");
                 label = "Cần dọn";
-                emoji = "";
                 break;
             case "maintenance":
                 badgeBg = Color.parseColor("#1AEB5757");
@@ -260,7 +298,6 @@ public class RoomDetailActivity extends AppCompatActivity {
                 numberBg = Color.parseColor("#1AEB5757");
                 numberText = Color.parseColor("#e87070");
                 label = "Bảo trì";
-                emoji = "";
                 break;
             default:
                 badgeBg = Color.parseColor("#1A7C7A72");
@@ -269,7 +306,6 @@ public class RoomDetailActivity extends AppCompatActivity {
                 numberBg = Color.parseColor("#1A7C7A72");
                 numberText = Color.parseColor("#7C7A72");
                 label = "Không rõ";
-                emoji = "";
         }
 
         if (tvStatusBadge.getBackground() instanceof GradientDrawable) {
@@ -280,7 +316,7 @@ public class RoomDetailActivity extends AppCompatActivity {
         tvStatusBadge.setTextColor(badgeText);
         tvStatusBadge.setText(label);
 
-        // Update room number background color in hero
+        // Cập nhật màu sắc cho phần Hero số phòng
         View numberBgView = findViewById(R.id.viewHeroAvatarBg);
         if (numberBgView != null && numberBgView.getBackground() instanceof GradientDrawable) {
             GradientDrawable gd = (GradientDrawable) numberBgView.getBackground();
@@ -289,13 +325,19 @@ public class RoomDetailActivity extends AppCompatActivity {
         tvHeroNumber.setTextColor(numberText);
     }
 
+    /**
+     * Logic tab Khách ở (Guests): 
+     * - Nếu trống: Hiển thị nút mời đặt phòng.
+     * - Nếu có khách: Hiển thị danh sách khách và nút Trả phòng & Thanh toán.
+     */
     private void setupGuestsTab() {
         layoutTabGuests.removeAllViews();
         List<Guest> guests = room.getGuests();
 
+        // Xử lý khi phòng đang trống hoặc bảo trì
         if (guests == null || guests.isEmpty()) {
             if ("vacant".equals(room.getStatus())) {
-                // Show booking card
+                // Hiển thị thẻ Đặt phòng khi phòng đang trống
                 com.google.android.material.card.MaterialCardView bookingCard = new com.google.android.material.card.MaterialCardView(this);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -305,8 +347,8 @@ public class RoomDetailActivity extends AppCompatActivity {
                 bookingCard.setLayoutParams(params);
                 bookingCard.setRadius(18f * getResources().getDisplayMetrics().density);
                 bookingCard.setCardElevation(0f);
-                bookingCard.setCardBackgroundColor(Color.parseColor("#0D9a7340")); // Very light brown tint
-                bookingCard.setStrokeColor(Color.parseColor("#269a7340")); // Light brown stroke
+                bookingCard.setCardBackgroundColor(Color.parseColor("#0D9a7340")); 
+                bookingCard.setStrokeColor(Color.parseColor("#269a7340")); 
                 bookingCard.setStrokeWidth((int)(1 * getResources().getDisplayMetrics().density));
                 
                 LinearLayout layout = new LinearLayout(this);
@@ -349,7 +391,6 @@ public class RoomDetailActivity extends AppCompatActivity {
                 btnBook.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#9a7340")));
                 btnBook.setCornerRadius((int) (12 * getResources().getDisplayMetrics().density));
                 btnBook.setElevation(0f);
-                btnBook.setStateListAnimator(null);
                 btnBook.setOnClickListener(v -> openSelectCustomer());
                 
                 layout.addView(title);
@@ -358,17 +399,13 @@ public class RoomDetailActivity extends AppCompatActivity {
                 bookingCard.addView(layout);
                 layoutTabGuests.addView(bookingCard);
                 
-            } else if ("dirty".equals(room.getStatus())) {
+            } else {
+                // Hiển thị thông báo khi phòng bẩn hoặc bảo trì
                 TextView prompt = new TextView(this);
-                prompt.setText("Phòng cần được dọn dẹp trước khi nhận khách mới.");
-                prompt.setTextSize(13);
-                prompt.setTextColor(Color.parseColor("#7a7568"));
-                prompt.setGravity(android.view.Gravity.CENTER);
-                prompt.setPadding(20, 30, 20, 30);
-                layoutTabGuests.addView(prompt);
-            } else if ("maintenance".equals(room.getStatus())) {
-                TextView prompt = new TextView(this);
-                prompt.setText(room.getNote() != null ? room.getNote() : "Phòng đang trong quá trình bảo trì.");
+                String msg = "dirty".equals(room.getStatus()) ? 
+                    "Phòng cần được dọn dẹp trước khi nhận khách mới." : 
+                    (room.getNote() != null ? room.getNote() : "Phòng đang được bảo trì.");
+                prompt.setText(msg);
                 prompt.setTextSize(13);
                 prompt.setTextColor(Color.parseColor("#7a7568"));
                 prompt.setGravity(android.view.Gravity.CENTER);
@@ -378,7 +415,7 @@ public class RoomDetailActivity extends AppCompatActivity {
             return;
         }
 
-        // Show guest list
+        // --- TRƯỜNG HỢP PHÒNG CÓ KHÁCH (HIỂN THỊ DANH SÁCH KHÁCH) ---
         for (int i = 0; i < guests.size(); i++) {
             Guest guest = guests.get(i);
             View guestView = getLayoutInflater().inflate(R.layout.item_guest, layoutTabGuests, false);
@@ -388,19 +425,12 @@ public class RoomDetailActivity extends AppCompatActivity {
             TextView tvStar = guestView.findViewById(R.id.tvRepresentativeStar);
 
             tvName.setText(guest.getName());
-            
-            String cccd = guest.getCccd();
-            String phone = guest.getPhone();
-            
-            String cccdVal = (cccd == null || cccd.isEmpty() || "null".equals(cccd) || "-".equals(cccd)) ? "-" : cccd;
-            String phoneVal = (phone == null || phone.isEmpty() || "null".equals(phone) || "-".equals(phone)) ? "-" : phone;
-            
+            String cccdVal = (guest.getCccd() == null || guest.getCccd().isEmpty()) ? "-" : guest.getCccd();
+            String phoneVal = (guest.getPhone() == null || guest.getPhone().isEmpty()) ? "-" : guest.getPhone();
             tvInfo.setText(String.format("CCCD: %s | SĐT: %s", cccdVal, phoneVal));
 
-            // Set avatar initials and color (Squircle style)
-            String initials = getInitials(guest.getName());
-            tvAvatar.setText(initials);
-            
+            // Hiển thị Avatar viết tắt (Initials)
+            tvAvatar.setText(getInitials(guest.getName()));
             int colorIndex = Math.abs(guest.getName().hashCode()) % 6;
             int[] colors = {0xFF9a7340, 0xFF3464b4, 0xFF3a8a5a, 0xFFb47814, 0xFFc0392b, 0xFF7b5ea7};
             int color = colors[colorIndex];
@@ -408,37 +438,29 @@ public class RoomDetailActivity extends AppCompatActivity {
             GradientDrawable gd = new GradientDrawable();
             gd.setShape(GradientDrawable.RECTANGLE);
             gd.setCornerRadius(12 * getResources().getDisplayMetrics().density);
-            
-            // 10% alpha for background
-            int alphaBg = Math.round(255 * 0.1f);
-            int bgColor = Color.argb(alphaBg, Color.red(color), Color.green(color), Color.blue(color));
-            gd.setColor(bgColor);
-            
-            // 25% alpha for stroke
-            int alphaStroke = Math.round(255 * 0.25f);
-            int strokeColor = Color.argb(alphaStroke, Color.red(color), Color.green(color), Color.blue(color));
-            gd.setStroke((int)(1 * getResources().getDisplayMetrics().density), strokeColor);
+            gd.setColor(Color.argb(Math.round(255 * 0.1f), Color.red(color), Color.green(color), Color.blue(color)));
+            gd.setStroke((int)(1 * getResources().getDisplayMetrics().density), Color.argb(Math.round(255 * 0.25f), Color.red(color), Color.green(color), Color.blue(color)));
             
             tvAvatar.setBackground(gd);
             tvAvatar.setTextColor(color);
-            tvAvatar.setTypeface(null, android.graphics.Typeface.BOLD);
 
-            if (i == 0) {
-                tvStar.setVisibility(View.VISIBLE);
-            }
+            // Đánh dấu người đại diện (khách đầu tiên)
+            if (i == 0) tvStar.setVisibility(View.VISIBLE);
 
             layoutTabGuests.addView(guestView);
         }
 
-        // Add checkout button
+        // HIỂN THỊ THẺ THANH TOÁN (CHECKOUT CARD)
         View checkoutCard = getLayoutInflater().inflate(R.layout.card_checkout, layoutTabGuests, false);
         TextView tvSummary = checkoutCard.findViewById(R.id.tvCheckoutSummary);
         
+        // Tính toán chi phí dự kiến
         int nights = calculateNights(room.getCheckIn(), room.getCheckOut());
         double total = nights * room.getPrice();
-        tvSummary.setText(String.format(Locale.getDefault(), "Tổng tiền: %s (%d đêm × %s)", 
+        tvSummary.setText(String.format(Locale.getDefault(), "Tổng tiền dự tính: %s (%d đêm × %s)", 
             formatPrice(total), nights, formatPrice(room.getPrice())));
 
+        // Xử lý sự kiện Trả phòng
         View btnCheckout = checkoutCard.findViewById(R.id.btnCheckout);
         btnCheckout.setOnClickListener(v -> {
             new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
@@ -449,9 +471,10 @@ public class RoomDetailActivity extends AppCompatActivity {
                 .setPositiveButton("Xác nhận", (dialog, which) -> {
                     com.example.hotel_management.data.db.RoomRepository repo = 
                         new com.example.hotel_management.data.db.RoomRepository(this);
+                    // Thực hiện nghiệp vụ checkout trong DB
                     if (repo.checkoutRoom(room, total, nights)) {
                         Toast.makeText(this, "Đã trả phòng " + room.getNumber(), Toast.LENGTH_SHORT).show();
-                        // Refresh data
+                        // Làm mới dữ liệu sau khi thanh toán
                         room = repo.getRoomById(room.getId());
                         updateRoomData();
                         setupGuestsTab();
@@ -464,13 +487,19 @@ public class RoomDetailActivity extends AppCompatActivity {
         layoutTabGuests.addView(checkoutCard);
     }
 
+    /**
+     * Lấy 2 chữ cái đầu của tên khách để làm Avatar.
+     */
     private String getInitials(String name) {
         if (name == null || name.isEmpty()) return "?";
-        String[] parts = name.split("\\s+");
+        String[] parts = name.trim().split("\\s+");
         if (parts.length == 1) return parts[0].substring(0, Math.min(2, parts[0].length())).toUpperCase();
         return (parts[0].substring(0, 1) + parts[parts.length - 1].substring(0, 1)).toUpperCase();
     }
 
+    /**
+     * Tính toán số đêm giữa 2 mốc thời gian (Tối thiểu 1 đêm).
+     */
     private int calculateNights(String checkIn, String checkOut) {
         try {
             if (checkIn == null || checkOut == null) return 1;
@@ -486,6 +515,9 @@ public class RoomDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Hiển thị Lịch sử đặt phòng (Tab History).
+     */
     private void setupHistoryTab() {
         layoutTabHistory.removeAllViews();
         List<BookingHistory> history = room.getHistory();
@@ -503,21 +535,14 @@ public class RoomDetailActivity extends AppCompatActivity {
 
         for (BookingHistory h : history) {
             View historyView = getLayoutInflater().inflate(R.layout.item_history, layoutTabHistory, false);
-            TextView tvId = historyView.findViewById(R.id.tvHistoryId);
-            TextView tvCheckIn = historyView.findViewById(R.id.tvCheckIn);
-            TextView tvCheckOut = historyView.findViewById(R.id.tvCheckOut);
-            TextView tvNights = historyView.findViewById(R.id.tvNights);
-            TextView tvTotal = historyView.findViewById(R.id.tvHistoryTotal);
-            TextView tvGuests = historyView.findViewById(R.id.tvHistoryGuests);
+            ((TextView) historyView.findViewById(R.id.tvHistoryId)).setText("#" + h.getId());
+            ((TextView) historyView.findViewById(R.id.tvCheckIn)).setText(h.getCheckIn());
+            ((TextView) historyView.findViewById(R.id.tvCheckOut)).setText(h.getCheckOut());
+            ((TextView) historyView.findViewById(R.id.tvNights)).setText(h.getNights() + " đêm");
+            ((TextView) historyView.findViewById(R.id.tvHistoryTotal)).setText(formatPrice(h.getTotal()));
+            ((TextView) historyView.findViewById(R.id.tvHistoryGuests)).setText(h.getGuests().size() + " người");
 
-            tvId.setText("#" + h.getId());
-            tvCheckIn.setText(h.getCheckIn());
-            tvCheckOut.setText(h.getCheckOut());
-            tvNights.setText(h.getNights() + " đêm");
-            tvTotal.setText(formatPrice(h.getTotal()));
-            tvGuests.setText(h.getGuests().size() + " người");
-
-            // Display guest names list
+            // Hiển thị danh sách tên khách đã từng ở
             TextView tvGuestNames = historyView.findViewById(R.id.tvHistoryGuestNames);
             if (h.getGuests() != null && !h.getGuests().isEmpty()) {
                 StringBuilder sb = new StringBuilder("Khách: ");
@@ -527,39 +552,36 @@ public class RoomDetailActivity extends AppCompatActivity {
                 }
                 tvGuestNames.setText(sb.toString());
                 tvGuestNames.setVisibility(View.VISIBLE);
-                historyView.findViewById(R.id.tvHistoryGuestNames).setVisibility(View.VISIBLE);
-            } else {
-                tvGuestNames.setVisibility(View.GONE);
-                // Also hide the divider if possible, but the view above is easier to just keep
             }
-
             layoutTabHistory.addView(historyView);
         }
     }
 
+    /**
+     * Chuyển mã loại phòng sang nhãn tiếng Việt.
+     */
     private String getTypeLabel(String type) {
         if (type == null) return "Đơn";
         switch (type.toLowerCase()) {
-            case "single": return "Đơn";
-            case "double": return "Đôi";
-            case "quad": return "4 người";
+            case "single": return "Phòng đơn";
+            case "double": return "Phòng đôi";
+            case "quad": return "Phòng 4 người";
             default: return type;
         }
     }
 
-    private String getTypeIcon(String type) {
-        return "";
-    }
-
+    /**
+     * Định dạng tiền tệ rút gọn (Ví dụ: 1.5M, 500K).
+     */
     private String formatPrice(double price) {
-        if (price >= 1000000) {
-            return String.format(Locale.getDefault(), "%.1fM", price / 1000000.0);
-        } else if (price >= 1000) {
-            return String.format(Locale.getDefault(), "%.0fK", price / 1000.0);
-        }
+        if (price >= 1000000) return String.format(Locale.getDefault(), "%.1fM", price / 1000000.0);
+        if (price >= 1000) return String.format(Locale.getDefault(), "%.0fK", price / 1000.0);
         return String.valueOf((int) price);
     }
 
+    /**
+     * Mở màn hình chọn khách hàng để đặt phòng.
+     */
     private void openSelectCustomer() {
         Intent intent = new Intent(this, SelectCustomerActivity.class);
         intent.putExtra("room", room);
@@ -567,29 +589,34 @@ public class RoomDetailActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Làm mới dữ liệu mỗi khi Activity được kích hoạt lại (từ màn hình khác quay lại).
+     */
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh data when coming back from booking
         if (room != null) {
             room = refreshRoomData();
             if (room != null) {
                 updateRoomData();
-                if (currentTab == 1) {
-                    setupGuestsTab();
-                } else if (currentTab == 2) {
-                    setupHistoryTab();
-                }
+                if (currentTab == 1) setupGuestsTab();
+                else if (currentTab == 2) setupHistoryTab();
             }
         }
     }
 
+    /**
+     * Lấy lại dữ liệu phòng mới nhất từ Database.
+     */
     private Room refreshRoomData() {
         com.example.hotel_management.data.db.RoomRepository repo = 
             new com.example.hotel_management.data.db.RoomRepository(this);
         return repo.getRoomById(room.getId());
     }
 
+    /**
+     * Hiển thị xác nhận xóa phòng vĩnh viễn.
+     */
     private void showDeleteConfirmation() {
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle("Xoá phòng?")
@@ -602,5 +629,14 @@ public class RoomDetailActivity extends AppCompatActivity {
                     finish();
                 })
                 .show();
+    }
+
+    /**
+     * Điều chỉnh độ trong suốt màu sắc.
+     */
+    private int adjustAlpha(int color, float factor) {
+        int alpha = Math.round(Color.alpha(color) * factor);
+        if (alpha == 0) alpha = Math.round(255 * factor);
+        return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
     }
 }

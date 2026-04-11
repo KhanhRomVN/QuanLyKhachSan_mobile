@@ -2,12 +2,17 @@ package com.example.hotel_management.data.model;
 
 import java.io.Serializable;
 
+/**
+ * Lớp đại diện cho một Khách lưu trú thực tế trong phòng.
+ * Khác với Customer (hồ sơ khách hàng), Guest dùng để lưu danh sách người ở thực tế 
+ * tại thời điểm Check-in (có thể gồm nhiều người trong một phòng).
+ */
 public class Guest implements Serializable {
     private static final long serialVersionUID = 1L;
-    private int id;
-    private String name;
-    private String cccd;
-    private String phone;
+    private int id;         // ID định danh
+    private String name;    // Họ tên khách
+    private String cccd;    // Số CCCD/CMND
+    private String phone;   // Số điện thoại
 
     public Guest() {}
 
@@ -18,6 +23,7 @@ public class Guest implements Serializable {
         this.phone = phone;
     }
 
+    // --- Các phương thức Getter và Setter ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
